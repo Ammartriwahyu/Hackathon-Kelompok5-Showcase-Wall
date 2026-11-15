@@ -1,6 +1,7 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useDebouncedValue } from "@/shared/hooks/useDebouncedValue";
 import { useAuthStore } from "@/shared/stores/useAuthStore";
 import {
   getAdminSummary,
@@ -26,17 +27,22 @@ export function useDashboardWorks() {
   const user = useAuthStore((s) => s.user);
   const searchQuery = useDashboardStore((s) => s.searchQuery);
   const statusFilter = useDashboardStore((s) => s.statusFilter);
+  const debouncedSearch = useDebouncedValue(searchQuery.trim(), 300);
   const isAdmin = user?.role === "Admin";
 
-  const params = {
-    q: searchQuery.trim() || undefined,
-    status: statusFilter === "ALL" ? undefined : statusFilter,
-    limit: 20,
-  };
-
-  return useQuery({
-    queryKey: ["dashboard", "works", user?.role, searchQuery.trim(), statusFilter],
-    queryFn: () => (isAdmin ? getAdminWorks(params) : getMyWorks(params)),
+  return useInfiniteQuery({
+    queryKey: ["dashboard", "works", user?.role, debouncedSearch, statusFilter],
+    queryFn: ({ pageParam }) => {
+      const params = {
+        q: debouncedSearch || undefined,
+        status: statusFilter === "ALL" ? undefined : statusFilter,
+        cursor: pageParam,
+        limit: 20,
+      };
+      return isAdmin ? getAdminWorks(params) : getMyWorks(params);
+    },
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => lastPage.meta?.next_cursor ?? undefined,
     enabled: Boolean(user),
   });
 }

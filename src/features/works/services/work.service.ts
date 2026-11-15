@@ -34,16 +34,12 @@ export async function getManagedWorkById(id: string) {
 }
 
 export async function createWork(formData: FormData) {
-  const res = await api.post<ApiResponse<ManagedWork>>("/works", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const res = await api.post<ApiResponse<ManagedWork>>("/works", formData);
   return res.data.data;
 }
 
 export async function updateWork(id: string, formData: FormData) {
-  const res = await api.patch<ApiResponse<ManagedWork>>(`/works/${id}`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const res = await api.patch<ApiResponse<ManagedWork>>(`/works/${id}`, formData);
   return res.data.data;
 }
 

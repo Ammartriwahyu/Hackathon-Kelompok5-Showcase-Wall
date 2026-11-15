@@ -22,6 +22,7 @@ import {
   workFormSchema,
   type WorkFormInput,
 } from "../schemas/work.schema";
+import { TechStackSelect } from "./TechStackSelect";
 import { WorkLivePreview } from "./WorkLivePreview";
 
 type WorkFormProps = {
@@ -42,6 +43,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
     register,
     handleSubmit,
     watch,
+    setValue,
     setError,
     formState: { errors },
   } = useForm<WorkFormInput>({
@@ -262,13 +264,17 @@ export function WorkForm({ initialData }: WorkFormProps) {
           )}
         </div>
 
-        <Input
+        <input type="hidden" {...register("tech_stack_text")} />
+        <TechStackSelect
           id="work-tech"
-          label="Tech Stack"
-          hint="Pisahkan dengan koma"
-          placeholder="Next.js, TypeScript, Go, PostgreSQL"
+          selected={previewData.tech_stack}
+          onChange={(next) =>
+            setValue("tech_stack_text", next.join(", "), {
+              shouldValidate: true,
+              shouldDirty: true,
+            })
+          }
           error={errors.tech_stack_text?.message}
-          {...register("tech_stack_text")}
         />
 
         <Input

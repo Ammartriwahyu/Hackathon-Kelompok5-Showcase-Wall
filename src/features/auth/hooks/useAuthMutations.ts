@@ -19,8 +19,10 @@ import {
 
 export function useFinishLogin() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const setAuth = useAuthStore((s) => s.setAuth);
   return (session: AuthSession) => {
+    queryClient.removeQueries({ queryKey: ["dashboard"] });
     setAuth(session.user, session.access_token);
     toast.success(`Selamat datang, ${session.user.display_name}!`);
     router.replace("/dashboard");

@@ -31,8 +31,3 @@ export async function loginWithFirebase(idToken: string) {
 export async function logoutSession(): Promise<void> {
   await api.post("/auth/logout");
 }
-
-export async function getMe() {
-  const res = await api.get<ApiResponse<User>>("/me");
-  return res.data.data;
-}

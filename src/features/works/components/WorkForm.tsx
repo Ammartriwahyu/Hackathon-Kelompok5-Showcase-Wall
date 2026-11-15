@@ -66,9 +66,11 @@ export function WorkForm({ initialData }: WorkFormProps) {
   }, [localPreviewUrl]);
 
   const handleCoverChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
+    const file = e.target.files?.[0];
+    if (!file) return;
     const err = validateCoverFile(file, isEdit);
     if (err) {
+      e.target.value = "";
       setCoverError(err);
       setCoverFile(null);
       setLocalPreviewUrl(null);
@@ -76,9 +78,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
     }
     setCoverError(null);
     setCoverFile(file);
-    if (file) {
-      setLocalPreviewUrl(URL.createObjectURL(file));
-    }
+    setLocalPreviewUrl(URL.createObjectURL(file));
   };
 
   const handleApiError = (err: unknown) => {
@@ -122,6 +122,11 @@ export function WorkForm({ initialData }: WorkFormProps) {
     }
   };
 
+  const onInvalid = () => {
+    const fileErr = validateCoverFile(coverFile, isEdit);
+    if (fileErr) setCoverError(fileErr);
+  };
+
   const initialCategory = initialData?.category?.trim();
   const categoryOptions: readonly string[] =
     initialCategory &&
@@ -147,7 +152,8 @@ export function WorkForm({ initialData }: WorkFormProps) {
   return (
     <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-12">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        onSubmit={handleSubmit(onSubmit, onInvalid)}
         className="space-y-5 rounded-2xl border border-border bg-white p-6 shadow-xs xl:col-span-7"
       >
         <Input

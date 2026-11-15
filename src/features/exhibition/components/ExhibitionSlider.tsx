@@ -1,5 +1,7 @@
 "use client";
 
+import { resolveMediaUrl } from "@/lib/utils";
+
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ExternalLink, ImageOff, MonitorPlay, RefreshCw, Users } from "lucide-react";
 import Link from "next/link";
@@ -158,7 +160,7 @@ export function ExhibitionSlider() {
             <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl lg:col-span-7">
               {currentWork.cover_url ? (
                 <img
-                  src={currentWork.cover_url}
+                  src={resolveMediaUrl(currentWork.cover_url)}
                   alt={currentWork.title}
                   className="h-full w-full object-cover"
                 />

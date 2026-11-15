@@ -105,14 +105,14 @@ export function OtpCodeForm({ open, email, purpose, onClose }: OtpCodeFormProps)
           title={purpose === "login" ? "Verifikasi Masuk" : "Verifikasi Email"}
           description={
             <>
-              Kode 6 digit telah dikirim ke <span className="font-mono text-slate-900">{maskEmail(email)}</span>.
+              Kode 6 digit telah dikirim ke <span className="font-mono text-foreground">{maskEmail(email)}</span>.
               Berlaku 10 menit.
             </>
           }
         />
 
         <fieldset>
-          <legend className="mb-3 text-base font-medium text-slate-800 sm:text-lg">Kode OTP</legend>
+          <legend className="mb-3 text-base font-medium text-brand-800 sm:text-lg">Kode OTP</legend>
           <div className="grid grid-cols-6 gap-2 sm:gap-3">
             {digits.map((digit, i) => (
               <input
@@ -131,10 +131,10 @@ export function OtpCodeForm({ open, email, purpose, onClose }: OtpCodeFormProps)
                 aria-label={`Digit ${i + 1} dari ${LENGTH}`}
                 aria-invalid={verify.isError}
                 className={cn(
-                  "h-16 w-full rounded-2xl border bg-white text-center text-2xl font-semibold text-slate-900 outline-none transition sm:h-20 sm:text-3xl",
-                  "placeholder:text-base placeholder:text-slate-300",
-                  "focus:border-2 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100",
-                  verify.isError ? "border-amber-400" : "border-slate-200",
+                  "h-16 w-full rounded-2xl border bg-white text-center text-2xl font-semibold text-foreground outline-none transition sm:h-20 sm:text-3xl",
+                  "placeholder:text-base placeholder:text-brand-200",
+                  "focus:border-2 focus:border-primary focus:ring-4 focus:ring-brand-100",
+                  verify.isError ? "border-amber-400" : "border-border",
                 )}
               />
             ))}
@@ -142,14 +142,14 @@ export function OtpCodeForm({ open, email, purpose, onClose }: OtpCodeFormProps)
         </fieldset>
 
         <div
-          className="mt-6 flex h-17 items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-5 text-base text-slate-600 sm:text-lg"
+          className="mt-6 flex h-17 items-center justify-between rounded-2xl border border-border bg-brand-100/30 px-5 text-base text-muted sm:text-lg"
           aria-live="polite"
         >
           <span className="flex items-center gap-3">
             <Clock className="size-5" aria-hidden />
             {canResend ? "Kode belum masuk?" : "Kirim ulang kode"}
           </span>
-          {seconds > 0 && <span className="rounded-md bg-slate-200/70 px-3 py-1 font-mono text-base">{seconds} dtk</span>}
+          {seconds > 0 && <span className="rounded-md bg-brand-100/70 px-3 py-1 font-mono text-base">{seconds} dtk</span>}
         </div>
 
         <div className="mt-6">
@@ -172,7 +172,7 @@ export function OtpCodeForm({ open, email, purpose, onClose }: OtpCodeFormProps)
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg text-base text-slate-600 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 sm:text-lg"
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg text-base text-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-lg"
           >
             <ArrowLeft className="size-5" aria-hidden />
             Kembali
@@ -181,7 +181,7 @@ export function OtpCodeForm({ open, email, purpose, onClose }: OtpCodeFormProps)
             type="button"
             onClick={handleResend}
             disabled={!canResend}
-            className="min-h-11 rounded-lg text-base font-semibold text-indigo-600 hover:text-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:cursor-not-allowed disabled:text-slate-400 sm:text-lg"
+            className="min-h-11 rounded-lg text-base font-semibold text-primary hover:text-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:text-brand-400 sm:text-lg"
           >
             {resend.isPending ? "Mengirim..." : "Kirim ulang kode"}
           </button>

@@ -1,7 +1,6 @@
 "use client";
 
 import { RotateCcw, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useWorkFacets } from "../hooks/usePublicWorks";
 import { useGalleryStore } from "../stores/useGalleryStore";
 
@@ -43,7 +42,7 @@ export function GalleryFilterBar() {
             />
           </div>
 
-          <div className="w-full md:w-60">
+          <div className="w-full md:w-52">
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -54,6 +53,22 @@ export function GalleryFilterBar() {
               {categories.map((category) => (
                 <option key={category} value={category}>
                   {category}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="w-full md:w-52">
+            <select
+              value={selectedTech}
+              onChange={(e) => setSelectedTech(e.target.value)}
+              aria-label="Filter tech stack"
+              className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-700 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            >
+              <option value="">Semua Tech Stack</option>
+              {techStack.map((tech) => (
+                <option key={tech} value={tech}>
+                  {tech}
                 </option>
               ))}
             </select>
@@ -70,33 +85,6 @@ export function GalleryFilterBar() {
             </button>
           )}
         </div>
-
-        {techStack.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1.5 border-t border-slate-100 pt-3">
-            <span className="mr-1 font-mono text-xs font-medium uppercase text-slate-400">
-              Tech Stack:
-            </span>
-            {techStack.map((tech) => {
-              const active = selectedTech === tech;
-              return (
-                <button
-                  key={tech}
-                  type="button"
-                  onClick={() => setSelectedTech(tech)}
-                  aria-pressed={active}
-                  className={cn(
-                    "rounded-md border px-2.5 py-1 font-mono text-xs font-medium transition-colors",
-                    active
-                      ? "border-indigo-200 bg-indigo-50 text-indigo-700"
-                      : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50",
-                  )}
-                >
-                  {tech}
-                </button>
-              );
-            })}
-          </div>
-        )}
       </div>
     </section>
   );

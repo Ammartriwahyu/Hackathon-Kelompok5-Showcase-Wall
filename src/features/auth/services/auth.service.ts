@@ -8,7 +8,6 @@ export async function registerAccount(input: RegisterInput): Promise<void> {
   await api.post("/auth/register", input);
 }
 
-// 202 = kode OTP dikirim. Jika OTP dimatikan di backend, respons langsung berisi sesi.
 export async function loginWithPassword(input: LoginInput): Promise<AuthSession | null> {
   const res = await api.post<Partial<ApiResponse<AuthSession>> | "">("/auth/login", input);
   const session = res.data ? res.data.data : undefined;

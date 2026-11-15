@@ -10,35 +10,18 @@ import { isFirebaseEnabled } from "@/lib/firebase";
 import { Button } from "@/shared/components/ui/Button";
 import { Input } from "@/shared/components/ui/Input";
 import { registerSchema, type RegisterInput } from "../schemas/auth.schema";
-import { useGuestRedirect, useRegisterMutation } from "../hooks/useAuthMutations";
-import { AuthDivider, AuthSteps, FormAlert, PasswordToggle, StepHeader, type FormAlertData } from "./AuthParts";
+import { useRegisterMutation } from "../hooks/useAuthMutations";
+import { AuthCard, AuthDivider, FormAlert, PasswordToggle, StatusLine, StepHeader, type FormAlertData } from "./AuthParts";
 import { OAuthButton } from "./OAuthButton";
-import { OtpCodeForm } from "./OtpCodeForm";
 
 const FIELDS = ["name", "email", "password"] as const;
 
-export function RegisterForm() {
-  useGuestRedirect();
-  const [step, setStep] = useState<"credentials" | "otp">("credentials");
-  const [email, setEmail] = useState("");
+type RegisterFormProps = {
+  onOtpRequired: (email: string) => void;
+  onNotice: (message: string) => void;
+};
 
-  return (
-    <AuthSteps
-      step={step}
-      credentials={
-        <RegisterStep
-          onOtpRequired={(value) => {
-            setEmail(value);
-            setStep("otp");
-          }}
-        />
-      }
-      otp={<OtpCodeForm email={email} purpose="register" onBack={() => setStep("credentials")} />}
-    />
-  );
-}
-
-function RegisterStep({ onOtpRequired }: { onOtpRequired: (email: string) => void }) {
+export function RegisterForm({ onOtpRequired, onNotice }: RegisterFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const registerMutation = useRegisterMutation();
   const {
@@ -77,63 +60,79 @@ function RegisterStep({ onOtpRequired }: { onOtpRequired: (email: string) => voi
         : { variant: "error", title: "Gagal membuat akun", description: getErrorMessage(registerMutation.error) };
 
   return (
-    <form onSubmit={onSubmit} noValidate>
-      <StepHeader label="Langkah 1" step={1} title="Buat Akun" description="Akun baru otomatis menjadi Kontributor" />
-
-      {isFirebaseEnabled && (
-        <>
-          <OAuthButton label="Daftar dengan Google" />
-          <AuthDivider text="atau daftar dengan email" />
-        </>
-      )}
-
-      <FormAlert alert={alert} />
-
-      <div className="space-y-5">
-        <Input
-          id="register-name"
-          label="Nama"
-          autoComplete="name"
-          placeholder="Nama lengkap"
-          icon={<User className="size-5" />}
-          error={errors.name?.message}
-          {...register("name")}
+    <AuthCard>
+      <form onSubmit={onSubmit} noValidate aria-labelledby="register-title" className="flex flex-1 flex-col">
+        <StepHeader
+          titleId="register-title"
+          label="Langkah 1"
+          step={1}
+          title="Buat Akun"
+          description="Akun baru otomatis menjadi Kontributor"
         />
-        <Input
-          id="register-email"
-          type="email"
-          label="Email"
-          hint="Gunakan email aktif"
-          autoComplete="email"
-          placeholder="nama@email.com"
-          icon={<Mail className="size-5" />}
-          error={errors.email?.message}
-          {...register("email")}
-        />
-        <Input
-          id="register-password"
-          type={showPassword ? "text" : "password"}
-          label="Password"
-          hint="8–72 karakter"
-          autoComplete="new-password"
-          icon={<Lock className="size-5" />}
-          trailing={<PasswordToggle visible={showPassword} onToggle={() => setShowPassword((v) => !v)} />}
-          error={errors.password?.message}
-          {...register("password")}
-        />
-      </div>
 
-      <Button type="submit" className="mt-8 w-full" loading={registerMutation.isPending} loadingText="Memproses...">
-        Daftar
-        <ArrowRight className="size-5" aria-hidden />
-      </Button>
+        {isFirebaseEnabled && (
+          <>
+            <OAuthButton
+              label="Daftar dengan Google"
+              onCancelled={() => onNotice("Login dengan Google dibatalkan oleh pengguna.")}
+            />
+            <AuthDivider text="atau daftar dengan email" />
+          </>
+        )}
 
-      <p className="mt-6 text-center text-sm text-slate-600">
-        Sudah punya akun?{" "}
-        <Link href="/login" className="font-semibold text-indigo-600 hover:text-indigo-700">
-          Masuk
-        </Link>
-      </p>
-    </form>
+        <FormAlert alert={alert} />
+
+        <div className="space-y-7">
+          <Input
+            id="register-name"
+            inputSize="lg"
+            label="Nama"
+            autoComplete="name"
+            placeholder="Nama lengkap"
+            icon={<User className="size-6" />}
+            error={errors.name?.message}
+            {...register("name")}
+          />
+          <Input
+            id="register-email"
+            type="email"
+            inputSize="lg"
+            label="Email"
+            hint="Gunakan email aktif"
+            autoComplete="email"
+            placeholder="nama@email.com"
+            icon={<Mail className="size-6" />}
+            error={errors.email?.message}
+            {...register("email")}
+          />
+          <Input
+            id="register-password"
+            type={showPassword ? "text" : "password"}
+            inputSize="lg"
+            label="Password"
+            hint="8–72 karakter"
+            autoComplete="new-password"
+            icon={<Lock className="size-6" />}
+            trailing={<PasswordToggle visible={showPassword} onToggle={() => setShowPassword((v) => !v)} />}
+            error={errors.password?.message}
+            {...register("password")}
+          />
+        </div>
+
+        <div className="mt-auto pt-12">
+          <Button type="submit" size="lg" className="w-full" disabled={registerMutation.isPending}>
+            Daftar
+            <ArrowRight className="size-6" aria-hidden />
+          </Button>
+          <StatusLine show={registerMutation.isPending} label="Status" value="Memproses..." boxed />
+          <p className="mt-8 text-center text-base text-slate-600 sm:text-lg">
+            Sudah punya akun?{" "}
+            <Link href="/login" className="font-semibold text-indigo-600 hover:text-indigo-700">
+              Masuk
+            </Link>
+          </p>
+        </div>
+      </form>
+    </AuthCard>
   );
 }

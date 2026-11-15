@@ -1,13 +1,16 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/axios";
 import {
+  createWork,
   deleteWork,
   publishWork,
   toggleFeaturedWork,
   unpublishWork,
+  updateWork,
 } from "../services/work.service";
 import { useDashboardStore } from "../stores/useDashboardStore";
 
@@ -78,6 +81,35 @@ export function useToggleFeaturedMutation() {
     },
     onError: (err) => {
       toast.error(getErrorMessage(err, "Gagal memperbarui status unggulan."));
+    },
+  });
+}
+
+export function useCreateWorkMutation() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createWork,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      toast.success("Karya berhasil disimpan sebagai Draft.");
+      router.push("/dashboard");
+    },
+  });
+}
+
+export function useUpdateWorkMutation(workId: string) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (formData: FormData) => updateWork(workId, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["works"] });
+      toast.success("Perubahan karya berhasil disimpan.");
+      router.push("/dashboard");
     },
   });
 }

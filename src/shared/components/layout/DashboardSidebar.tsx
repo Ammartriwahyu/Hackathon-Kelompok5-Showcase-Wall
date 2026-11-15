@@ -29,16 +29,16 @@ export function DashboardSidebar() {
   return (
     <>
       {/* Mobile Topbar */}
-      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 lg:hidden">
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/90 px-4 backdrop-blur-md lg:hidden">
         <Link href="/dashboard" className="flex items-center gap-2">
           <Image src={logo} alt="" priority className="h-8 w-auto" />
-          <span className="font-bold text-slate-900">Dashboard</span>
+          <span className="font-bold text-foreground">Dashboard</span>
         </Link>
 
         <div className="flex items-center gap-2">
           <Link
             href="/dashboard/works/new"
-            className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-indigo-600 px-3 text-xs font-semibold text-white hover:bg-indigo-700"
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-3 text-xs font-semibold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <PlusCircle className="size-4" aria-hidden />
             <span>Buat</span>
@@ -56,15 +56,15 @@ export function DashboardSidebar() {
       </header>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden w-64 shrink-0 flex-col justify-between border-r border-slate-200 bg-white p-5 lg:flex">
+      <aside className="hidden w-64 shrink-0 flex-col justify-between border-r border-border bg-background p-5 lg:flex">
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-2.5">
             <Image src={logo} alt="" className="h-9 w-auto" />
             <div>
-              <span className="block text-sm font-bold leading-tight text-slate-900">
+              <span className="block text-sm font-bold leading-tight text-foreground">
                 Showcase Wall
               </span>
-              <span className="text-[11px] text-slate-500">
+              <span className="text-[11px] text-muted">
                 Panel Pengelolaan
               </span>
             </div>
@@ -78,10 +78,10 @@ export function DashboardSidebar() {
                   key={href}
                   href={href}
                   className={cn(
-                    "flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                    "flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                     isActive
-                      ? "bg-indigo-50 text-indigo-700"
-                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
+                      ? "bg-primary-soft text-primary"
+                      : "text-muted hover:bg-primary-soft/50 hover:text-foreground",
                   )}
                 >
                   <Icon className="size-4 shrink-0" aria-hidden />
@@ -92,7 +92,7 @@ export function DashboardSidebar() {
 
             <Link
               href="/"
-              className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
+              className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-primary-soft/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <ExternalLink className="size-4 shrink-0" aria-hidden />
               <span>Lihat Galeri Publik</span>
@@ -100,18 +100,18 @@ export function DashboardSidebar() {
           </nav>
         </div>
 
-        <div className="space-y-3 border-t border-slate-100 pt-4">
+        <div className="space-y-3 border-t border-border pt-4">
           {user && (
-            <div className="rounded-xl bg-slate-50 p-3">
+            <div className="rounded-xl bg-primary-soft/40 p-3">
               <div className="flex items-center justify-between gap-2">
-                <p className="truncate text-sm font-semibold text-slate-900">
+                <p className="truncate text-sm font-semibold text-foreground">
                   {user.display_name}
                 </p>
                 <Badge variant={user.role === "Admin" ? "primary" : "neutral"}>
                   {user.role}
                 </Badge>
               </div>
-              <p className="mt-0.5 truncate text-xs text-slate-500">
+              <p className="mt-0.5 truncate text-xs text-muted">
                 {user.email}
               </p>
             </div>

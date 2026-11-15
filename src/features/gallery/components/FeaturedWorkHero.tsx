@@ -49,9 +49,9 @@ export function FeaturedWorkHero() {
                 <Badge variant="primary">{work.category}</Badge>
               </div>
 
-              <h1 className="text-2xl font-bold leading-snug tracking-tight text-slate-900 sm:text-3xl">
+              <h2 className="text-2xl font-bold leading-snug tracking-tight text-slate-900 sm:text-3xl">
                 {work.title}
-              </h1>
+              </h2>
               <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600">
                 {work.summary}
               </p>

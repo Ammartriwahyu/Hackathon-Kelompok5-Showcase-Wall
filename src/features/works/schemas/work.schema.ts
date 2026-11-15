@@ -26,8 +26,8 @@ const optionalUrlSchema = z
     (val) => {
       if (!val) return true;
       try {
-        new URL(val);
-        return true;
+        const parsed = new URL(val);
+        return parsed.protocol === "http:" || parsed.protocol === "https:";
       } catch {
         return false;
       }

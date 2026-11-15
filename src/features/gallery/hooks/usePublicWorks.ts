@@ -1,6 +1,7 @@
 "use client";
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useDebouncedValue } from "@/shared/hooks/useDebouncedValue";
 import {
   getFeaturedWork,
   getPublicWorks,
@@ -28,7 +29,7 @@ export function usePublicWorks() {
   const selectedCategory = useGalleryStore((s) => s.selectedCategory);
   const selectedTech = useGalleryStore((s) => s.selectedTech);
 
-  const q = searchQuery.trim() || undefined;
+  const q = useDebouncedValue(searchQuery.trim(), 300) || undefined;
   const category = selectedCategory || undefined;
   const tech_stack = selectedTech || undefined;
 

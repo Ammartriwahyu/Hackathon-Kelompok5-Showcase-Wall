@@ -1,6 +1,8 @@
 "use client";
 
 import { resolveMediaUrl } from "@/lib/utils";
+import Image from "next/image";
+import logo from "@/assets/logo.png";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ExternalLink, ImageOff, MonitorPlay, RefreshCw, Users } from "lucide-react";
@@ -130,10 +132,8 @@ export function ExhibitionSlider() {
       {/* Top Booth Header */}
       <div className="flex items-center justify-between px-6 pt-5 lg:px-10">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-xs font-bold tracking-wider text-white">
-            BCC
-          </span>
-          <span className="text-sm font-bold tracking-tight text-slate-200">
+          <Image src={logo} alt="BCC Logo" className="h-8 w-8" />
+          <span className="text-sm font-bold tracking-tight text-brand-100 lg:text-base">
             BCC Showcase Wall &bull; Exhibition Mode
           </span>
         </div>

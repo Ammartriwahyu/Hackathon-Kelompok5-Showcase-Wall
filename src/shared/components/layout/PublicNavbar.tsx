@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/shared/stores/useAuthStore";
+import Image from "next/image";
+import logo from "@/assets/logo.png";
 
 export function PublicNavbar() {
   const pathname = usePathname();
@@ -15,16 +17,23 @@ export function PublicNavbar() {
     <header className="sticky top-0 z-30 h-16 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md">
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-xs font-bold tracking-tight text-white shadow-xs">
-            BCC
-          </span>
+          <Image
+            src={logo}
+            alt=""
+            aria-hidden
+            priority
+            className="size-11 rounded-xl object-contain sm:size-12.5"
+          />
           <span className="font-bold tracking-tight text-slate-900">
             BCC Showcase Wall
           </span>
         </Link>
 
         <div className="flex items-center gap-3 sm:gap-6">
-          <nav aria-label="Navigasi Publik" className="flex items-center gap-2 sm:gap-5">
+          <nav
+            aria-label="Navigasi Publik"
+            className="flex items-center gap-2 sm:gap-5"
+          >
             <Link
               href="/"
               className={cn(

@@ -52,13 +52,15 @@ api.interceptors.response.use(
       !isAuthRoute
     ) {
       original._retry = true;
+      let token: string;
       try {
-        const token = await refreshAccessToken();
-        original.headers.Authorization = `Bearer ${token}`;
-        return api(original);
+        token = await refreshAccessToken();
       } catch {
         useAuthStore.getState().logout();
+        return Promise.reject(error);
       }
+      original.headers.Authorization = `Bearer ${token}`;
+      return api(original);
     }
     return Promise.reject(error);
   },

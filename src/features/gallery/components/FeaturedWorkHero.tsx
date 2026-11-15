@@ -1,5 +1,7 @@
 "use client";
 
+import { resolveMediaUrl } from "@/lib/utils";
+
 import { ArrowRight, ImageOff, Star } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/shared/components/ui/Badge";
@@ -23,17 +25,17 @@ export function FeaturedWorkHero() {
 
   return (
     <section aria-label="Karya Unggulan" className="mb-8">
-      <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
+      <article className="overflow-hidden rounded-2xl border border-border bg-white shadow-xs">
         <div className="grid grid-cols-1 lg:grid-cols-12">
-          <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 lg:col-span-6 lg:aspect-auto lg:min-h-[300px]">
+          <div className="relative aspect-[16/9] w-full overflow-hidden bg-brand-100/60 lg:col-span-6 lg:aspect-auto lg:min-h-[300px]">
             {work.cover_url ? (
               <img
-                src={work.cover_url}
+                src={resolveMediaUrl(work.cover_url)}
                 alt={work.title}
                 className="h-full w-full object-cover"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center text-slate-400">
+              <div className="flex h-full w-full items-center justify-center text-brand-400">
                 <ImageOff className="size-8" aria-hidden />
               </div>
             )}
@@ -49,23 +51,23 @@ export function FeaturedWorkHero() {
                 <Badge variant="primary">{work.category}</Badge>
               </div>
 
-              <h2 className="text-2xl font-bold leading-snug tracking-tight text-slate-900 sm:text-3xl">
+              <h2 className="text-2xl font-bold leading-snug tracking-tight text-foreground sm:text-3xl">
                 {work.title}
               </h2>
-              <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600">
+              <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted">
                 {work.summary}
               </p>
 
               {work.tech_stack.length > 0 && (
                 <div className="mt-5">
-                  <span className="mb-2 block font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                  <span className="mb-2 block font-mono text-[11px] font-semibold uppercase tracking-wider text-brand-400">
                     Tech Stack
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {work.tech_stack.map((tech) => (
                       <span
                         key={tech}
-                        className="rounded-md border border-slate-200/80 bg-slate-100 px-2.5 py-1 font-mono text-xs font-medium text-slate-700"
+                        className="rounded-md border border-border/80 bg-brand-100/60 px-2.5 py-1 font-mono text-xs font-medium text-brand-700"
                       >
                         {tech}
                       </span>
@@ -75,17 +77,17 @@ export function FeaturedWorkHero() {
               )}
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-5">
-              <p className="text-xs font-medium text-slate-500 sm:text-sm">
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-brand-100 pt-5">
+              <p className="text-xs font-medium text-brand-500 sm:text-sm">
                 Tim:{" "}
-                <span className="font-semibold text-slate-700">
+                <span className="font-semibold text-brand-700">
                   {work.team_members.join(", ")}
                 </span>
               </p>
 
               <Link
                 href={`/works/${work.id}`}
-                className="inline-flex h-10 items-center gap-2 rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-indigo-700"
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-primary-hover"
               >
                 <span>Lihat Detail</span>
                 <ArrowRight className="size-4" aria-hidden />

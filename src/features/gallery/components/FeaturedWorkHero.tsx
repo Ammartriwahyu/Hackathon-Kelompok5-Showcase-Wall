@@ -2,15 +2,17 @@
 
 import { resolveMediaUrl } from "@/lib/utils";
 
-import { ArrowRight, ImageOff, Star } from "lucide-react";
+import { ArrowRight, ImageOff, RefreshCw, Star } from "lucide-react";
 import Link from "next/link";
+import { Alert } from "@/shared/components/ui/Alert";
 import { Badge } from "@/shared/components/ui/Badge";
+import { Button } from "@/shared/components/ui/Button";
 import { Skeleton } from "@/shared/components/ui/Skeleton";
 import { useFeaturedWork } from "../hooks/usePublicWorks";
 import { Mascot } from "@/shared/components/ui/Mascot";
 
 export function FeaturedWorkHero() {
-  const { data: work, isLoading, isError } = useFeaturedWork();
+  const { data: work, isLoading, isError, isFetching, refetch } = useFeaturedWork();
 
   if (isLoading) {
     return (
@@ -20,15 +22,40 @@ export function FeaturedWorkHero() {
     );
   }
 
-  if (isError || !work) {
+  if (isError) {
+    return (
+      <section aria-label="Karya Unggulan" className="mb-8">
+        <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-border bg-white p-5 shadow-xs sm:flex-row sm:items-center">
+          <Alert
+            variant="error"
+            title="Gagal memuat karya unggulan"
+            description="Terjadi kendala saat mengambil data karya unggulan dari server."
+            className="flex-1"
+          />
+          <Button
+            variant="outline"
+            onClick={() => refetch()}
+            loading={isFetching}
+            loadingText="Memuat..."
+            className="h-10 shrink-0 text-sm"
+          >
+            <RefreshCw className="size-4" aria-hidden />
+            <span>Coba Lagi</span>
+          </Button>
+        </div>
+      </section>
+    );
+  }
+
+  if (!work) {
     return null;
   }
 
   return (
     <section aria-label="Karya Unggulan" className="mb-8">
       <article className="overflow-hidden rounded-2xl border border-border bg-white shadow-xs">
-        <div className="grid grid-cols-1 lg:grid-cols-12">
-          <div className="relative aspect-[16/9] w-full overflow-hidden bg-brand-100/60 lg:col-span-6 lg:aspect-auto lg:min-h-[300px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 lg:items-center">
+          <div className="relative aspect-video w-full overflow-hidden bg-brand-100/60 lg:col-span-6">
             {work.cover_url ? (
               <img
                 src={resolveMediaUrl(work.cover_url)}

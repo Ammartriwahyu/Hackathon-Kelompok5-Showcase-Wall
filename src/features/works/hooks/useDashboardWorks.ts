@@ -17,7 +17,7 @@ export function useDashboardSummary() {
   const isAdmin = user?.role === "Admin";
 
   return useQuery({
-    queryKey: ["dashboard", "summary", user?.role],
+    queryKey: ["dashboard", "summary", user?.id, user?.role],
     queryFn: () => (isAdmin ? getAdminSummary() : getMySummary()),
     enabled: Boolean(user),
   });
@@ -31,7 +31,7 @@ export function useDashboardWorks() {
   const isAdmin = user?.role === "Admin";
 
   return useInfiniteQuery({
-    queryKey: ["dashboard", "works", user?.role, debouncedSearch, statusFilter],
+    queryKey: ["dashboard", "works", user?.id, user?.role, debouncedSearch, statusFilter],
     queryFn: ({ pageParam }) => {
       const params = {
         q: debouncedSearch || undefined,
@@ -51,7 +51,7 @@ export function useManagedWork(workId: string) {
   const user = useAuthStore((s) => s.user);
 
   return useQuery({
-    queryKey: ["dashboard", "work", workId],
+    queryKey: ["dashboard", "work", user?.id, workId],
     queryFn: () => getManagedWorkById(workId),
     enabled: Boolean(user && workId),
   });

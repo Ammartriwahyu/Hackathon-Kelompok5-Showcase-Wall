@@ -37,8 +37,3 @@ export async function getPublicWorkDetail(id: string) {
   const res = await api.get<ApiResponse<PublicWorkDetail>>(`/works/${id}`);
   return res.data.data;
 }
-
-export async function getExhibitionWorks() {
-  const res = await api.get<ApiResponse<PublicWork[]>>("/works/exhibition");
-  return res.data.data;
-}

@@ -1,6 +1,6 @@
 "use client";
 
-import { RotateCcw, Search } from "lucide-react";
+import { RefreshCw, RotateCcw, Search } from "lucide-react";
 import { useWorkFacets } from "../hooks/usePublicWorks";
 import { useGalleryStore } from "../stores/useGalleryStore";
 
@@ -13,7 +13,7 @@ export function GalleryFilterBar() {
   const setSelectedTech = useGalleryStore((s) => s.setSelectedTech);
   const resetFilters = useGalleryStore((s) => s.resetFilters);
 
-  const { data: facets } = useWorkFacets();
+  const { data: facets, isLoading, isError, isFetching, refetch } = useWorkFacets();
   const categories = facets?.categories ?? [];
   const techStack = facets?.tech_stack ?? [];
   const hasActiveFilter = Boolean(
@@ -46,10 +46,11 @@ export function GalleryFilterBar() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
+              disabled={isLoading || isError}
               aria-label="Filter kategori"
-              className="h-10 w-full rounded-xl border border-border bg-brand-100/30 px-3 text-sm font-medium text-brand-700 focus:border-brand-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-100"
+              className="h-10 w-full rounded-xl border border-border bg-brand-100/30 px-3 text-sm font-medium text-brand-700 focus:border-brand-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-100 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <option value="">Semua Kategori</option>
+              <option value="">{isLoading ? "Memuat kategori..." : "Semua Kategori"}</option>
               {categories.map((category) => (
                 <option key={category} value={category}>
                   {category}
@@ -62,10 +63,11 @@ export function GalleryFilterBar() {
             <select
               value={selectedTech}
               onChange={(e) => setSelectedTech(e.target.value)}
+              disabled={isLoading || isError}
               aria-label="Filter tech stack"
-              className="h-10 w-full rounded-xl border border-border bg-brand-100/30 px-3 text-sm font-medium text-brand-700 focus:border-brand-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-100"
+              className="h-10 w-full rounded-xl border border-border bg-brand-100/30 px-3 text-sm font-medium text-brand-700 focus:border-brand-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-100 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <option value="">Semua Tech Stack</option>
+              <option value="">{isLoading ? "Memuat tech stack..." : "Semua Tech Stack"}</option>
               {techStack.map((tech) => (
                 <option key={tech} value={tech}>
                   {tech}
@@ -85,6 +87,21 @@ export function GalleryFilterBar() {
             </button>
           )}
         </div>
+
+        {isError && (
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+            <span>Gagal memuat daftar kategori dan tech stack.</span>
+            <button
+              type="button"
+              onClick={() => refetch()}
+              disabled={isFetching}
+              className="inline-flex items-center gap-1 font-semibold underline hover:text-red-900 disabled:opacity-60"
+            >
+              <RefreshCw className="size-3.5" aria-hidden />
+              <span>{isFetching ? "Memuat..." : "Coba Lagi"}</span>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

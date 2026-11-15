@@ -6,9 +6,8 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export const api = axios.create({
   baseURL,
-  withCredentials: true, 
+  withCredentials: true,
 });
-
 
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().accessToken;
@@ -20,9 +19,13 @@ let refreshPromise: Promise<string> | null = null;
 
 export function refreshAccessToken(): Promise<string> {
   refreshPromise ??= axios
-    .post<ApiResponse<{ access_token: string }>>(`${baseURL}/auth/refresh`, null, {
-      withCredentials: true,
-    })
+    .post<ApiResponse<{ access_token: string }>>(
+      `${baseURL}/auth/refresh`,
+      null,
+      {
+        withCredentials: true,
+      },
+    )
     .then((res) => {
       const token = res.data.data.access_token;
       useAuthStore.getState().setAccessToken(token);
@@ -40,9 +43,14 @@ api.interceptors.response.use(
   (res) => res,
   async (error: AxiosError<ApiError>) => {
     const original = error.config as RetryConfig | undefined;
-    const isAuthRoute = original?.url?.startsWith("/auth/");
+    const isAuthRoute = original?.url?.includes("/auth/");
 
-    if (error.response?.status === 401 && original && !original._retry && !isAuthRoute) {
+    if (
+      error.response?.status === 401 &&
+      original &&
+      !original._retry &&
+      !isAuthRoute
+    ) {
       original._retry = true;
       try {
         const token = await refreshAccessToken();
@@ -56,7 +64,20 @@ api.interceptors.response.use(
   },
 );
 
-export function getErrorMessage(err: unknown, fallback = "Terjadi kesalahan. Coba lagi.") {
-  if (axios.isAxiosError<ApiError>(err)) return err.response?.data?.error?.message ?? fallback;
+export function getErrorMessage(
+  err: unknown,
+  fallback = "Terjadi kesalahan. Coba lagi.",
+) {
+  if (axios.isAxiosError<ApiError>(err))
+    return err.response?.data?.error?.message ?? fallback;
   return fallback;
+}
+
+export function getFieldErrors(
+  err: unknown,
+): Record<string, string> | undefined {
+  if (axios.isAxiosError<ApiError>(err)) {
+    return err.response?.data?.error?.fields;
+  }
+  return undefined;
 }

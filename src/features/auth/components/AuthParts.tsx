@@ -5,6 +5,7 @@ import { Eye, EyeOff, Loader2, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 import { Alert } from "@/shared/components/ui/Alert";
 import { cn } from "@/lib/utils";
+import { Mascot } from "@/shared/components/ui/Mascot";
 
 export type FormAlertData = {
   variant: "error" | "warning";
@@ -14,18 +15,25 @@ export type FormAlertData = {
 
 export function AuthHero({ title }: { title: string }) {
   return (
-    <div>
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-primary-soft px-3 py-1 text-xs font-medium text-brand-600">
-        <ShieldCheck className="size-3.5" aria-hidden />
-        Alur Autentikasi Pengguna &amp; Kontributor
-      </span>
-      <h1 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-        {title}
-      </h1>
-      <p className="mt-2 text-sm leading-relaxed text-muted">
-        Dua opsi masuk terpadu dengan alur verifikasi dua langkah aman untuk
-        kontributor dan kurator karya pameran teknologi.
-      </p>
+    <div className="flex items-end justify-between gap-4">
+      <div>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-primary-soft px-3 py-1 text-xs font-medium text-brand-600">
+          <ShieldCheck className="size-3.5" aria-hidden />
+          Alur Autentikasi Pengguna &amp; Kontributor
+        </span>
+        <h1 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          {title}
+        </h1>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          Dua opsi masuk terpadu dengan alur verifikasi dua langkah aman untuk
+          kontributor dan kurator karya pameran teknologi.
+        </p>
+      </div>
+      <Mascot
+        variant="halo"
+        priority
+        className="hidden w-24 shrink-0 sm:block"
+      />
     </div>
   );
 }

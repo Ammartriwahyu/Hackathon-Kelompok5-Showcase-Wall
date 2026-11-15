@@ -6,3 +6,4 @@ export { OtpCodeForm } from "./components/OtpCodeForm";
 export { OAuthButton } from "./components/OAuthButton";
 export { AuthSwitch } from "./components/AuthSwitch";
 export { useLogoutMutation } from "./hooks/useAuthMutations";
+export { DashboardSidebarContainer } from "./components/DashboardSidebarContainer";

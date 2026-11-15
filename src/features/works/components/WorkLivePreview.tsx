@@ -28,11 +28,11 @@ export function WorkLivePreview({ data }: WorkLivePreviewProps) {
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+    <div className="rounded-2xl border border-border bg-white p-5 shadow-xs">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-brand-100 pb-4">
         <div>
-          <h2 className="text-sm font-bold text-slate-900">Live Preview</h2>
-          <p className="text-xs text-slate-500">
+          <h2 className="text-sm font-bold text-foreground">Live Preview</h2>
+          <p className="text-xs text-brand-500">
             Pratinjau tampilan sebelum disimpan ke server
           </p>
         </div>
@@ -40,7 +40,7 @@ export function WorkLivePreview({ data }: WorkLivePreviewProps) {
         <div
           role="tablist"
           aria-label="Mode pratinjau"
-          className="flex items-center gap-1 rounded-xl bg-slate-100 p-1"
+          className="flex items-center gap-1 rounded-xl bg-brand-100/60 p-1"
         >
           {(
             [
@@ -57,7 +57,7 @@ export function WorkLivePreview({ data }: WorkLivePreviewProps) {
                 aria-selected={active}
                 onClick={() => setMode(tab.value)}
                 className={`relative rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
-                  active ? "text-indigo-700" : "text-slate-600 hover:text-slate-900"
+                  active ? "text-brand-600" : "text-muted hover:text-foreground"
                 }`}
               >
                 {active && (
@@ -79,7 +79,7 @@ export function WorkLivePreview({ data }: WorkLivePreviewProps) {
           <WorkCard work={cardData} />
         </div>
       ) : (
-        <div className="max-h-[70vh] overflow-y-auto rounded-xl border border-slate-100 bg-slate-50 p-4">
+        <div className="max-h-[70vh] overflow-y-auto rounded-xl border border-brand-100 bg-brand-100/30 p-4">
           <WorkDetailContent work={data} />
         </div>
       )}

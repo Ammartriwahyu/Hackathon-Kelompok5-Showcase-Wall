@@ -1,20 +1,33 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 import { Alert } from "@/shared/components/ui/Alert";
 import { cn } from "@/lib/utils";
 
 export type FormAlertData = { variant: "error" | "warning"; title: string; description?: string } | null;
 
+export function AuthHero({ title }: { title: string }) {
+  return (
+    <div className="text-center">
+      <span className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-5 py-2 text-base font-medium text-indigo-700 sm:text-lg">
+        <ShieldCheck className="size-5" aria-hidden />
+        Alur Autentikasi Pengguna &amp; Kontributor
+      </span>
+      <h1 className="mt-8 text-3xl font-bold tracking-tight text-slate-900 sm:text-5xl">{title}</h1>
+      <p className="mx-auto mt-6 max-w-4xl text-lg leading-relaxed text-slate-600 sm:text-xl">
+        Dua opsi masuk terpadu dengan alur verifikasi dua langkah aman untuk kontributor dan kurator karya pameran
+        teknologi.
+      </p>
+    </div>
+  );
+}
+
 export function AuthCard({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <section
-      className={cn(
-        "flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-11",
-        className,
-      )}
+      className={cn("flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-11", className)}
     >
       {children}
     </section>

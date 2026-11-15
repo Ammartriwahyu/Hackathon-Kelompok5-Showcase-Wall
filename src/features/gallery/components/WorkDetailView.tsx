@@ -26,7 +26,7 @@ export function WorkDetailView({ workId }: WorkDetailViewProps) {
       <div className="mb-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-indigo-600"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-500 transition-colors hover:text-primary"
         >
           <ArrowLeft className="size-4" aria-hidden />
           <span>Kembali ke Galeri</span>
@@ -48,21 +48,21 @@ export function WorkDetailView({ workId }: WorkDetailViewProps) {
 
       {/* 2. Not Found / Unpublished State (404 or WebSocket unpublished/deleted) */}
       {!isLoading && isNotFound && (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-slate-200 bg-white px-6 py-16 text-center shadow-xs">
-          <div className="flex size-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
+        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-white px-6 py-16 text-center shadow-xs">
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-brand-100/60 text-brand-500">
             <FileQuestion className="size-7" aria-hidden />
           </div>
           <div className="max-w-md">
-            <h1 className="text-lg font-bold text-slate-900">
+            <h1 className="text-lg font-bold text-foreground">
               Karya tidak ditemukan atau belum dipublikasikan
             </h1>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-brand-500">
               Karya mungkin belum diterbitkan, telah disembunyikan oleh Admin, atau sudah dihapus.
             </p>
           </div>
           <Link
             href="/"
-            className="mt-1 inline-flex h-10 items-center gap-2 rounded-xl bg-indigo-600 px-5 text-sm font-semibold text-white hover:bg-indigo-700"
+            className="mt-1 inline-flex h-10 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-white hover:bg-primary-hover"
           >
             <ArrowLeft className="size-4" aria-hidden />
             <span>Kembali ke Galeri</span>
@@ -72,7 +72,7 @@ export function WorkDetailView({ workId }: WorkDetailViewProps) {
 
       {/* 3. Transient Error State */}
       {!isLoading && isError && !isNotFound && (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-slate-200 bg-white p-10 text-center">
+        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-white p-10 text-center">
           <Alert
             variant="error"
             title="Gagal memuat detail karya"

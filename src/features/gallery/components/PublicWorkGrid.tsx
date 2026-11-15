@@ -37,7 +37,7 @@ export function PublicWorkGrid() {
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="overflow-hidden rounded-xl border border-slate-200 bg-white"
+            className="overflow-hidden rounded-xl border border-border bg-white"
           >
             <Skeleton className="aspect-[16/9] w-full rounded-none" />
             <div className="space-y-3 p-5">
@@ -57,7 +57,7 @@ export function PublicWorkGrid() {
   // 2. Error State
   if (isError) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-slate-200 bg-white p-10 text-center">
+      <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-border bg-white p-10 text-center">
         <Alert
           variant="error"
           title="Gagal memuat galeri karya"
@@ -75,17 +75,17 @@ export function PublicWorkGrid() {
   // 3. Empty State
   if (works.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-6 py-16 text-center">
-        <div className="flex size-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+      <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-white px-6 py-16 text-center">
+        <div className="flex size-12 items-center justify-center rounded-2xl bg-brand-100/60 text-brand-400">
           <FolderSearch className="size-6" aria-hidden />
         </div>
         <div>
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-foreground">
             {hasActiveFilter
               ? "Tidak ada karya yang cocok"
               : "Belum ada karya yang dipublikasikan"}
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-brand-500">
             {hasActiveFilter
               ? "Coba ubah kata kunci pencarian atau pilihan filter."
               : "Karya yang telah disetujui Admin akan tampil di halaman ini."}

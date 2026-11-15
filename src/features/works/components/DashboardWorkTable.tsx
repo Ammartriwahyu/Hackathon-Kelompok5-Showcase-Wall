@@ -1,5 +1,7 @@
 "use client";
 
+import { resolveMediaUrl } from "@/lib/utils";
+
 import { motion } from "framer-motion";
 import {
   Eye,
@@ -202,7 +204,7 @@ export function DashboardWorkTable() {
                       <div className="aspect-[16/9] w-20 overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
                         {work.cover_url ? (
                           <img
-                            src={work.cover_url}
+                            src={resolveMediaUrl(work.cover_url)}
                             alt={work.title}
                             className="h-full w-full object-cover"
                           />
@@ -288,7 +290,7 @@ export function DashboardWorkTable() {
                   <div className="aspect-[16/9] w-24 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
                     {work.cover_url ? (
                       <img
-                        src={work.cover_url}
+                        src={resolveMediaUrl(work.cover_url)}
                         alt={work.title}
                         className="h-full w-full object-cover"
                       />

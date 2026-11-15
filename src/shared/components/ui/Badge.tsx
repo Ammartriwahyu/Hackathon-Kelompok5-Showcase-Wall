@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const VARIANTS = {
-  primary: "border-indigo-200 bg-indigo-50 text-indigo-700",
-  neutral: "border-slate-200 bg-slate-100 text-slate-700",
+  primary: "border-brand-200 bg-primary-soft text-brand-600",
+  neutral: "border-border bg-brand-100/60 text-brand-700",
   success: "border-emerald-200 bg-emerald-50 text-emerald-700",
   warning: "border-amber-200 bg-amber-50 text-amber-800",
   danger: "border-red-200 bg-red-50 text-red-700",

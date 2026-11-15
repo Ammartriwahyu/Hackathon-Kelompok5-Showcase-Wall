@@ -23,13 +23,13 @@ export function GalleryFilterBar() {
   return (
     <section
       aria-label="Pencarian dan Filter Galeri"
-      className="mb-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs"
+      className="mb-8 rounded-2xl border border-border bg-white p-4 shadow-xs"
     >
       <div className="flex flex-col gap-4">
         <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-center">
           <div className="relative flex-1">
             <Search
-              className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-brand-400"
               aria-hidden
             />
             <input
@@ -38,7 +38,7 @@ export function GalleryFilterBar() {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari judul karya..."
               aria-label="Cari judul karya"
-              className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-3.5 pl-10 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              className="h-10 w-full rounded-xl border border-border bg-brand-100/30 pr-3.5 pl-10 text-sm text-foreground placeholder:text-brand-400 focus:border-brand-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-100"
             />
           </div>
 
@@ -47,7 +47,7 @@ export function GalleryFilterBar() {
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               aria-label="Filter kategori"
-              className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-700 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              className="h-10 w-full rounded-xl border border-border bg-brand-100/30 px-3 text-sm font-medium text-brand-700 focus:border-brand-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-100"
             >
               <option value="">Semua Kategori</option>
               {categories.map((category) => (
@@ -63,7 +63,7 @@ export function GalleryFilterBar() {
               value={selectedTech}
               onChange={(e) => setSelectedTech(e.target.value)}
               aria-label="Filter tech stack"
-              className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-medium text-slate-700 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              className="h-10 w-full rounded-xl border border-border bg-brand-100/30 px-3 text-sm font-medium text-brand-700 focus:border-brand-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-100"
             >
               <option value="">Semua Tech Stack</option>
               {techStack.map((tech) => (
@@ -78,7 +78,7 @@ export function GalleryFilterBar() {
             <button
               type="button"
               onClick={resetFilters}
-              className="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-xl px-3 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
+              className="inline-flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-xl px-3 text-sm font-medium text-muted transition-colors hover:bg-brand-100/60 hover:text-foreground"
             >
               <RotateCcw className="size-4" aria-hidden />
               <span>Reset</span>

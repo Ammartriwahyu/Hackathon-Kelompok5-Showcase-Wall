@@ -1,3 +1,4 @@
+import { resolveMediaUrl } from "@/lib/utils";
 import {
   BookOpen,
   Code2,
@@ -44,24 +45,24 @@ export function WorkDetailContent({ work }: WorkDetailContentProps) {
           )}
         </div>
 
-        <h1 className="max-w-4xl text-2xl font-bold leading-tight tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+        <h1 className="max-w-4xl text-2xl font-bold leading-tight tracking-tight text-foreground sm:text-3xl lg:text-4xl">
           {work.title || "Judul Karya"}
         </h1>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted sm:text-base">
           {work.summary || "Ringkasan karya akan tampil di sini."}
         </p>
       </div>
 
       {/* 16:9 Primary Cover */}
-      <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm">
+      <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl border border-border bg-brand-100/60 shadow-sm">
         {work.cover_url ? (
           <img
-            src={work.cover_url}
+            src={resolveMediaUrl(work.cover_url)}
             alt={work.title || "Cover karya"}
             className="h-full w-full object-cover"
           />
         ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-slate-400">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-brand-400">
             <ImageOff className="size-8" aria-hidden />
             <span className="text-sm">Preview gambar cover akan tampil di sini</span>
           </div>
@@ -72,26 +73,26 @@ export function WorkDetailContent({ work }: WorkDetailContentProps) {
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
         {/* Left: Cerita & Manfaat */}
         <div className="flex flex-col gap-6 lg:col-span-8">
-          <article className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs">
-            <div className="mb-4 flex items-center gap-2 border-b border-slate-100 pb-3">
-              <BookOpen className="size-5 text-indigo-600" aria-hidden />
-              <h2 className="text-base font-bold tracking-tight text-slate-900">
+          <article className="rounded-xl border border-border bg-white p-6 shadow-xs">
+            <div className="mb-4 flex items-center gap-2 border-b border-brand-100 pb-3">
+              <BookOpen className="size-5 text-primary" aria-hidden />
+              <h2 className="text-base font-bold tracking-tight text-foreground">
                 Tentang Karya
               </h2>
             </div>
-            <p className="whitespace-pre-line text-sm leading-relaxed text-slate-600">
+            <p className="whitespace-pre-line text-sm leading-relaxed text-muted">
               {work.description || "Deskripsi lengkap karya akan tampil di sini."}
             </p>
           </article>
 
-          <section className="rounded-xl border border-indigo-100 border-l-4 border-l-indigo-600 bg-indigo-50/60 p-6 shadow-xs">
+          <section className="rounded-xl border border-brand-100 border-l-4 border-l-indigo-600 bg-primary-soft/60 p-6 shadow-xs">
             <div className="mb-3 flex items-center gap-2">
-              <Lightbulb className="size-5 text-indigo-600" aria-hidden />
-              <h2 className="text-base font-bold tracking-tight text-slate-900">
+              <Lightbulb className="size-5 text-primary" aria-hidden />
+              <h2 className="text-base font-bold tracking-tight text-foreground">
                 Masalah &amp; Manfaat Karya
               </h2>
             </div>
-            <p className="whitespace-pre-line text-sm leading-relaxed text-slate-700">
+            <p className="whitespace-pre-line text-sm leading-relaxed text-brand-700">
               {work.benefits || "Manfaat karya untuk pengguna akan tampil di sini."}
             </p>
           </section>
@@ -100,8 +101,8 @@ export function WorkDetailContent({ work }: WorkDetailContentProps) {
         {/* Right: Sidebar Info */}
         <aside className="flex flex-col gap-5 lg:sticky lg:top-20 lg:col-span-4">
           {hasLinks && (
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <div className="rounded-xl border border-border bg-white p-5 shadow-xs">
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-brand-500">
                 Tautan Akses
               </h3>
               <div className="flex flex-col gap-2.5">
@@ -110,7 +111,7 @@ export function WorkDetailContent({ work }: WorkDetailContentProps) {
                     href={work.demo_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
                   >
                     <span>Buka Live Demo</span>
                     <ExternalLink className="size-4" aria-hidden />
@@ -121,9 +122,9 @@ export function WorkDetailContent({ work }: WorkDetailContentProps) {
                     href={work.repo_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-800 transition-colors hover:bg-slate-50"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-100/40"
                   >
-                    <Code2 className="size-4 text-slate-600" aria-hidden />
+                    <Code2 className="size-4 text-muted" aria-hidden />
                     <span>Lihat Repository</span>
                   </a>
                 )}
@@ -131,8 +132,8 @@ export function WorkDetailContent({ work }: WorkDetailContentProps) {
             </div>
           )}
 
-          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <div className="rounded-xl border border-border bg-white p-5 shadow-xs">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-brand-500">
               Tech Stack
             </h3>
             {work.tech_stack.length > 0 ? (
@@ -140,30 +141,30 @@ export function WorkDetailContent({ work }: WorkDetailContentProps) {
                 {work.tech_stack.map((tech) => (
                   <span
                     key={tech}
-                    className="rounded-md border border-slate-200/80 bg-slate-100 px-2.5 py-1 font-mono text-xs font-medium text-slate-700"
+                    className="rounded-md border border-border/80 bg-brand-100/60 px-2.5 py-1 font-mono text-xs font-medium text-brand-700"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-slate-400">Belum ada tech stack</p>
+              <p className="text-xs text-brand-400">Belum ada tech stack</p>
             )}
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
-            <h3 className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <div className="rounded-xl border border-border bg-white p-5 shadow-xs">
+            <h3 className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-brand-500">
               <Users className="size-3.5" aria-hidden />
               <span>Anggota Tim</span>
             </h3>
             {work.team_members.length > 0 ? (
-              <ul className="space-y-1.5 text-sm font-medium text-slate-700">
+              <ul className="space-y-1.5 text-sm font-medium text-brand-700">
                 {work.team_members.map((member) => (
                   <li key={member}>{member}</li>
                 ))}
               </ul>
             ) : (
-              <p className="text-xs text-slate-400">Belum ada anggota tim</p>
+              <p className="text-xs text-brand-400">Belum ada anggota tim</p>
             )}
           </div>
         </aside>

@@ -70,9 +70,10 @@ export function getErrorMessage(
   err: unknown,
   fallback = "Terjadi kesalahan. Coba lagi.",
 ) {
-  if (axios.isAxiosError<ApiError>(err))
-    return err.response?.data?.error?.message ?? fallback;
-  return fallback;
+  if (!axios.isAxiosError<ApiError>(err)) return fallback;
+  if (!err.response)
+    return "Tidak dapat terhubung ke server. Periksa koneksi lalu coba lagi.";
+  return err.response.data?.error?.message ?? fallback;
 }
 
 export function getFieldErrors(
@@ -87,4 +88,3 @@ export function getFieldErrors(
 export function getErrorStatus(err: unknown) {
   return axios.isAxiosError(err) ? err.response?.status : undefined;
 }
-

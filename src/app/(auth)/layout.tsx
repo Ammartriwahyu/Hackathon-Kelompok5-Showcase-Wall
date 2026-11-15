@@ -3,42 +3,45 @@ import type { ReactNode } from "react";
 import { ArrowLeft } from "lucide-react";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
+  const year = new Date().getFullYear();
+
   return (
     <div className="flex min-h-dvh flex-col bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <header className="bg-white">
+        <div className="flex h-20 items-center justify-between gap-4 px-4 sm:h-25 sm:px-12">
           <Link
             href="/"
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            className="inline-flex min-h-11 items-center gap-3 rounded-lg text-base text-slate-700 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 sm:text-xl"
           >
-            <ArrowLeft className="size-4" aria-hidden />
+            <ArrowLeft className="size-5 sm:size-6" aria-hidden />
             <span className="hidden sm:inline">Kembali ke Galeri Publik</span>
             <span className="sm:hidden">Galeri</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <span className="grid size-9 place-items-center rounded-lg bg-indigo-600 text-xs font-bold text-white" aria-hidden>
+          <div className="flex items-center gap-3">
+            <span
+              aria-hidden
+              className="grid size-11 place-items-center rounded-xl bg-indigo-600 text-sm font-bold text-white sm:size-12.5 sm:text-lg"
+            >
               BCC
             </span>
-            <span className="text-sm font-semibold sm:text-base">BCC Showcase Wall</span>
-            <span className="hidden rounded-full border border-indigo-200 bg-indigo-50 px-2.5 py-0.5 font-mono text-xs text-indigo-700 sm:inline">
+            <span className="text-base font-semibold tracking-tight sm:text-xl">BCC Showcase Wall</span>
+            <span className="hidden rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1 font-mono text-base text-indigo-700 md:inline">
               Autentikasi
             </span>
           </div>
         </div>
       </header>
 
-      <main className="flex flex-1 items-center justify-center px-4 py-10">
-        <div className="w-full max-w-md overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-          {children}
-        </div>
-      </main>
+      <main className="flex-1">{children}</main>
 
       <footer className="border-t border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-5 text-sm text-slate-500 sm:flex-row sm:px-6">
-          <p>© 2026 BCC Showcase Wall.</p>
-          <nav aria-label="Tautan footer" className="flex gap-6">
+        <div className="flex flex-col items-center justify-between gap-4 px-4 py-8 text-base text-slate-500 sm:flex-row sm:px-12 sm:text-lg">
+          <p>© {year} BCC Showcase Wall. Technical Editorial Gallery.</p>
+          <nav aria-label="Tautan footer" className="flex flex-wrap justify-center gap-x-10 gap-y-2">
             <Link href="/" className="hover:text-slate-900">Galeri</Link>
             <Link href="/exhibition" className="hover:text-slate-900">Mode Pameran</Link>
+            <span>Panduan Kurasi</span>
+            <span>Kebijakan Privasi</span>
           </nav>
         </div>
       </footer>

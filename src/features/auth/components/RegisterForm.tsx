@@ -52,8 +52,9 @@ export function RegisterForm() {
   );
 
   const status = getErrorStatus(registerMutation.error);
+  const hasFieldErrors = status === 422 && Boolean(getFieldErrors(registerMutation.error));
   const alert: FormAlertData =
-    !registerMutation.isError || status === 409 || status === 422
+    !registerMutation.isError || status === 409 || hasFieldErrors
       ? null
       : status === 429
         ? { variant: "error", title: "Terlalu banyak permintaan", description: "Coba lagi nanti." }

@@ -19,10 +19,10 @@ export function Alert({ variant = "error", title, description, className }: Aler
         className,
       )}
     >
-      <Icon className="mt-0.5 size-4 shrink-0" aria-hidden />
+      <Icon className="mt-0.5 size-[1.1em] shrink-0" aria-hidden />
       <div>
         <p className="font-medium">{title}</p>
-        {description && <p className="mt-0.5 text-xs opacity-90">{description}</p>}
+        {description && <p className="mt-1 text-[0.9em] opacity-90">{description}</p>}
       </div>
     </div>
   );

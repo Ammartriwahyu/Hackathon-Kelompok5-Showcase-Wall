@@ -44,7 +44,7 @@ export function DashboardSummaryCards() {
       label: "Draft",
       value: data.total_draft,
       icon: FileEdit,
-      tone: "bg-slate-100 text-slate-700",
+      tone: "bg-brand-100/60 text-brand-700",
       hint: isAdmin ? "Seluruh karya draft" : "Karya draft milikmu",
     },
     {
@@ -65,7 +65,7 @@ export function DashboardSummaryCards() {
       label: "Unggulan",
       value: data.total_featured,
       icon: Star,
-      tone: "bg-indigo-50 text-indigo-700",
+      tone: "bg-primary-soft text-brand-600",
       hint: "Maksimal 1 karya sorotan",
     },
   ];
@@ -75,20 +75,20 @@ export function DashboardSummaryCards() {
       {cards.map(({ label, value, icon: Icon, tone, hint }) => (
         <div
           key={label}
-          className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs"
+          className="rounded-2xl border border-border bg-white p-5 shadow-xs"
         >
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <span className="text-xs font-semibold uppercase tracking-wider text-brand-500">
               {label}
             </span>
             <span className={`inline-flex size-8 items-center justify-center rounded-lg ${tone}`}>
               <Icon className="size-4" aria-hidden />
             </span>
           </div>
-          <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
+          <p className="mt-3 text-3xl font-bold tracking-tight text-foreground">
             {value}
           </p>
-          <p className="mt-1 text-xs text-slate-500">{hint}</p>
+          <p className="mt-1 text-xs text-brand-500">{hint}</p>
         </div>
       ))}
     </div>

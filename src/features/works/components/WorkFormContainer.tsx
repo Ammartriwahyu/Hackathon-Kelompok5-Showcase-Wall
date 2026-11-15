@@ -44,7 +44,7 @@ export function WorkFormContainer({ workId }: WorkFormContainerProps) {
           </Button>
           <Link
             href="/dashboard"
-            className="inline-flex h-10 items-center rounded-xl border border-slate-200 px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            className="inline-flex h-10 items-center rounded-xl border border-border px-4 text-sm font-semibold text-brand-700 hover:bg-brand-100/40"
           >
             Kembali ke Dashboard
           </Link>

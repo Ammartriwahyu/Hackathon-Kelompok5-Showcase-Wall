@@ -148,7 +148,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
     <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-12">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-xs xl:col-span-7"
+        className="space-y-5 rounded-2xl border border-border bg-white p-6 shadow-xs xl:col-span-7"
       >
         <Input
           id="work-title"
@@ -170,14 +170,14 @@ export function WorkForm({ initialData }: WorkFormProps) {
         <div>
           <label
             htmlFor="work-category"
-            className="mb-1.5 block text-sm font-medium text-slate-800"
+            className="mb-1.5 block text-sm font-medium text-brand-800"
           >
             Kategori
           </label>
           <select
             id="work-category"
             {...register("category")}
-            className="h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="h-12 w-full rounded-xl border border-border bg-white px-4 text-sm text-foreground outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
           >
             {categoryOptions.map((cat) => (
               <option key={cat} value={cat}>
@@ -193,15 +193,15 @@ export function WorkForm({ initialData }: WorkFormProps) {
         <div>
           <label
             htmlFor="work-cover"
-            className="mb-1.5 block text-sm font-medium text-slate-800"
+            className="mb-1.5 block text-sm font-medium text-brand-800"
           >
             Gambar Cover {isEdit ? "(Opsional saat edit)" : "(Wajib)"}
           </label>
           <label
             htmlFor="work-cover"
-            className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600 transition-colors hover:border-indigo-400 hover:bg-indigo-50/40"
+            className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-brand-200 bg-brand-100/30 px-4 py-3 text-sm text-muted transition-colors hover:border-brand-300 hover:bg-primary-soft/40"
           >
-            <ImagePlus className="size-5 text-indigo-600" aria-hidden />
+            <ImagePlus className="size-5 text-primary" aria-hidden />
             <span className="truncate">
               {coverFile
                 ? coverFile.name
@@ -221,7 +221,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
         <div>
           <label
             htmlFor="work-description"
-            className="mb-1.5 block text-sm font-medium text-slate-800"
+            className="mb-1.5 block text-sm font-medium text-brand-800"
           >
             Deskripsi Lengkap
           </label>
@@ -230,7 +230,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
             rows={4}
             placeholder="Ceritakan latar belakang, fitur utama, dan cara kerja proyek..."
             {...register("description")}
-            className="w-full rounded-xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-border bg-white p-3.5 text-sm text-foreground outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
           />
           {errors.description && (
             <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
@@ -240,7 +240,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
         <div>
           <label
             htmlFor="work-benefits"
-            className="mb-1.5 block text-sm font-medium text-slate-800"
+            className="mb-1.5 block text-sm font-medium text-brand-800"
           >
             Masalah &amp; Manfaat Karya
           </label>
@@ -249,7 +249,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
             rows={3}
             placeholder="Masalah apa yang diselesaikan dan manfaatnya bagi pengguna?"
             {...register("benefits")}
-            className="w-full rounded-xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-border bg-white p-3.5 text-sm text-foreground outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
           />
           {errors.benefits && (
             <p className="mt-1 text-sm text-red-600">{errors.benefits.message}</p>
@@ -293,10 +293,10 @@ export function WorkForm({ initialData }: WorkFormProps) {
           />
         </div>
 
-        <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
+        <div className="flex items-center justify-end gap-3 border-t border-brand-100 pt-4">
           <Link
             href="/dashboard"
-            className="inline-flex h-11 items-center rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            className="inline-flex h-11 items-center rounded-xl border border-border bg-white px-5 text-sm font-semibold text-brand-700 hover:bg-brand-100/40"
           >
             Batal
           </Link>

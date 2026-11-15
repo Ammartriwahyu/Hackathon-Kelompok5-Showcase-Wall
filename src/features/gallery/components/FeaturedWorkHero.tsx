@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Badge } from "@/shared/components/ui/Badge";
 import { Skeleton } from "@/shared/components/ui/Skeleton";
 import { useFeaturedWork } from "../hooks/usePublicWorks";
+import { Mascot } from "@/shared/components/ui/Mascot";
 
 export function FeaturedWorkHero() {
   const { data: work, isLoading, isError } = useFeaturedWork();
@@ -43,12 +44,21 @@ export function FeaturedWorkHero() {
 
           <div className="flex flex-col justify-between p-6 sm:p-8 lg:col-span-6">
             <div>
-              <div className="mb-3 flex flex-wrap items-center gap-2">
-                <Badge variant="warning">
-                  <Star className="size-3.5 fill-amber-500 text-amber-500" aria-hidden />
-                  Karya Unggulan
-                </Badge>
-                <Badge variant="primary">{work.category}</Badge>
+              <div className="mb-3 flex items-start justify-between gap-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant="warning">
+                    <Star
+                      className="size-3.5 fill-amber-500 text-amber-500"
+                      aria-hidden
+                    />
+                    Karya Unggulan
+                  </Badge>
+                  <Badge variant="primary">{work.category}</Badge>
+                </div>
+                <Mascot
+                  variant="inglory"
+                  className="-mt-2 hidden w-20 shrink-0 sm:block"
+                />
               </div>
 
               <h2 className="text-2xl font-bold leading-snug tracking-tight text-foreground sm:text-3xl">

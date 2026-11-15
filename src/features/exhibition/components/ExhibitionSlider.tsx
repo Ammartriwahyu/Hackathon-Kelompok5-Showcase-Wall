@@ -1,20 +1,122 @@
 "use client";
 
-import { resolveMediaUrl } from "@/lib/utils";
+import { useEffect, type ReactNode } from "react";
 import Image from "next/image";
-import logo from "@/assets/logo.png";
-
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft, ExternalLink, ImageOff, MonitorPlay, RefreshCw, Users } from "lucide-react";
 import Link from "next/link";
-import { useEffect } from "react";
-import { Button } from "@/shared/components/ui/Button";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  type Variants,
+} from "framer-motion";
+import { ArrowRight, ImageOff, RefreshCw, Star, X } from "lucide-react";
+import logo from "@/assets/logo.png";
+import { cn, resolveMediaUrl } from "@/lib/utils";
+import { Mascot } from "@/shared/components/ui/Mascot";
 import { Skeleton } from "@/shared/components/ui/Skeleton";
 import { useExhibitionWorks } from "../hooks/useExhibitionWorks";
 import { useExhibitionStore } from "../stores/useExhibitionStore";
 import { ExhibitionControls } from "./ExhibitionControls";
 
 const SLIDE_INTERVAL_MS = 7000;
+
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900";
+
+const coverVariants: Variants = {
+  enter: { opacity: 0, scale: 0.98 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
+  exit: { opacity: 0, transition: { duration: 0.2 } },
+};
+
+const infoVariants: Variants = {
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.12 } },
+};
+
+const itemVariants: Variants = {
+  enter: { opacity: 0, y: 14 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+  },
+  exit: { opacity: 0, transition: { duration: 0.15 } },
+};
+
+function ExhibitionShell({
+  children,
+  note,
+}: {
+  children: ReactNode;
+  note?: ReactNode;
+}) {
+  return (
+    <div className="flex min-h-dvh flex-col bg-brand-900 text-brand-50">
+      <header className="flex items-center justify-between gap-4 px-6 pt-6 lg:px-12 lg:pt-8">
+        <Link
+          href="/"
+          aria-label="Kembali ke galeri BCC Showcase Wall"
+          className={cn(
+            "flex min-h-11 items-center gap-3 rounded-lg",
+            focusRing,
+          )}
+        >
+          <Image src={logo} alt="" priority className="h-10 w-auto" />
+          <span className="hidden text-sm font-semibold text-brand-100 sm:inline">
+            BCC Showcase Wall
+          </span>
+        </Link>
+        <div className="flex items-center gap-4">
+          {note}
+          <Link
+            href="/"
+            className={cn(
+              "inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium text-brand-200 transition-colors hover:bg-brand-800 hover:text-brand-50",
+              focusRing,
+            )}
+          >
+            <X className="size-4" aria-hidden />
+            Keluar
+          </Link>
+        </div>
+      </header>
+      {children}
+    </div>
+  );
+}
+
+type CenteredStateProps = {
+  icon?: ReactNode;
+  mascot?: ReactNode;
+  title: string;
+  description: string;
+  action?: ReactNode;
+};
+
+function CenteredState({
+  icon,
+  mascot,
+  title,
+  description,
+  action,
+}: CenteredStateProps) {
+  return (
+    <main className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
+      {mascot ?? (
+        <div className="grid size-14 place-items-center rounded-2xl border border-brand-700 text-brand-300">
+          {icon}
+        </div>
+      )}
+      <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+      <p className="max-w-md text-brand-300">{description}</p>
+      {action}
+    </main>
+  );
+}
 
 export function ExhibitionSlider() {
   const prefersReducedMotion = useReducedMotion();
@@ -24,33 +126,40 @@ export function ExhibitionSlider() {
   const prevSlide = useExhibitionStore((s) => s.prevSlide);
   const togglePause = useExhibitionStore((s) => s.togglePause);
   const setPaused = useExhibitionStore((s) => s.setPaused);
+  const setCurrentIndex = useExhibitionStore((s) => s.setCurrentIndex);
 
-  const { data: works = [], isLoading, isError, refetch } = useExhibitionWorks();
+  const {
+    data: works = [],
+    isLoading,
+    isError,
+    refetch,
+    isRefetching,
+  } = useExhibitionWorks();
   const total = works.length;
-  const safeIndex = total > 0 ? currentIndex % total : 0;
+  const safeIndex = total > 0 ? Math.min(currentIndex, total - 1) : 0;
   const currentWork = works[safeIndex];
 
-  // Otomatis menjeda auto-slide jika sistem mengaktifkan Reduce Motion (PRD M7)
   useEffect(() => {
-    if (prefersReducedMotion) {
-      setPaused(true);
-    }
+    if (prefersReducedMotion) setPaused(true);
   }, [prefersReducedMotion, setPaused]);
 
-  // Auto-slide timer (reset interval ketika berpindah slide secara manual)
+  useEffect(() => {
+    if (total > 0 && currentIndex > total - 1) setCurrentIndex(total - 1);
+  }, [currentIndex, total, setCurrentIndex]);
+
   useEffect(() => {
     if (isPaused || total <= 1) return;
-    const timer = setInterval(() => {
-      nextSlide(total);
-    }, SLIDE_INTERVAL_MS);
+    const timer = setInterval(() => nextSlide(total), SLIDE_INTERVAL_MS);
     return () => clearInterval(timer);
   }, [isPaused, total, currentIndex, nextSlide]);
 
-  // Shortcut keyboard (Space, ArrowLeft, ArrowRight)
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (total === 0) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (total === 0 || e.repeat) return;
+      const target = e.target as HTMLElement | null;
+      if (target?.closest("input, textarea, select")) return;
       if (e.code === "Space") {
+        if (target?.closest("button, a")) return;
         e.preventDefault();
         togglePause();
       } else if (e.key === "ArrowRight") {
@@ -59,105 +168,97 @@ export function ExhibitionSlider() {
         prevSlide(total);
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [total, togglePause, nextSlide, prevSlide]);
 
-  // 1. Loading State
   if (isLoading) {
     return (
-      <div className="flex min-h-screen flex-col justify-between bg-slate-950 p-8 text-white">
-        <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 items-center gap-10 lg:grid-cols-12">
-          <Skeleton className="aspect-[16/9] w-full rounded-2xl bg-slate-800 lg:col-span-7" />
-          <div className="space-y-4 lg:col-span-5">
-            <Skeleton className="h-6 w-32 bg-slate-800" />
-            <Skeleton className="h-12 w-full bg-slate-800" />
-            <Skeleton className="h-24 w-full bg-slate-800" />
+      <ExhibitionShell>
+        <main
+          className="grid flex-1 items-center gap-8 px-6 py-8 lg:grid-cols-12 lg:gap-14 lg:px-12"
+          aria-busy="true"
+        >
+          <Skeleton className="aspect-video w-full rounded-2xl bg-brand-800 lg:col-span-7" />
+          <div className="space-y-5 lg:col-span-5">
+            <Skeleton className="h-4 w-32 bg-brand-800" />
+            <Skeleton className="h-14 w-full bg-brand-800" />
+            <Skeleton className="h-20 w-5/6 bg-brand-800" />
+            <Skeleton className="h-12 w-44 rounded-full bg-brand-800" />
           </div>
-        </div>
-      </div>
+        </main>
+      </ExhibitionShell>
     );
   }
 
-  // 2. Error State
   if (isError) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-950 px-6 text-center text-white">
-        <h1 className="text-2xl font-bold">Gagal memuat Mode Pameran</h1>
-        <p className="max-w-md text-sm text-slate-400">
-          Koneksi ke server bermasalah. Silakan coba muat ulang.
-        </p>
-        <div className="flex gap-3">
-          <Button onClick={() => refetch()} className="h-11 px-5 text-sm">
-            <RefreshCw className="size-4" aria-hidden />
-            <span>Coba Lagi</span>
-          </Button>
-          <Link
-            href="/"
-            className="inline-flex h-11 items-center gap-2 rounded-xl border border-slate-700 px-5 text-sm font-semibold text-slate-200 hover:bg-slate-800"
-          >
-            <ArrowLeft className="size-4" aria-hidden />
-            <span>Kembali ke Galeri</span>
-          </Link>
-        </div>
-      </div>
+      <ExhibitionShell>
+        <CenteredState
+          icon={<RefreshCw className="size-6" aria-hidden />}
+          title="Mode pameran belum bisa dimuat"
+          description="Koneksi ke server terputus. Periksa jaringan lalu coba lagi."
+          action={
+            <button
+              type="button"
+              onClick={() => refetch()}
+              disabled={isRefetching}
+              className={cn(
+                "mt-2 inline-flex h-12 items-center gap-2 rounded-full bg-brand-50 px-6 text-sm font-semibold text-brand-900 transition-colors hover:bg-brand-100 disabled:opacity-60",
+                focusRing,
+              )}
+            >
+              <RefreshCw
+                className={cn("size-4", isRefetching && "animate-spin")}
+                aria-hidden
+              />
+              {isRefetching ? "Memuat..." : "Coba lagi"}
+            </button>
+          }
+        />
+      </ExhibitionShell>
     );
   }
 
-  // 3. Empty State
-  if (total === 0 || !currentWork) {
+  if (!currentWork) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-950 px-6 text-center text-white">
-        <div className="flex size-16 items-center justify-center rounded-2xl bg-slate-900 text-indigo-400">
-          <MonitorPlay className="size-8" aria-hidden />
-        </div>
-        <h1 className="text-2xl font-bold">Belum ada karya untuk ditampilkan</h1>
-        <p className="max-w-md text-sm text-slate-400">
-          Karya yang sudah diterbitkan Admin akan otomatis muncul di layar pameran ini.
-        </p>
-        <Link
-          href="/"
-          className="inline-flex h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 text-sm font-semibold text-white hover:bg-indigo-500"
-        >
-          <ArrowLeft className="size-4" aria-hidden />
-          <span>Kembali ke Galeri</span>
-        </Link>
-      </div>
+      <ExhibitionShell>
+        <CenteredState
+          mascot={<Mascot variant="halo" className="w-36 sm:w-44" />}
+          title="Belum ada karya yang tayang"
+          description="Karya yang dipublikasikan Admin akan muncul di layar ini secara otomatis."
+        />
+      </ExhibitionShell>
     );
   }
 
-  // 4. Success State (Fullscreen Booth Display)
   return (
-    <div className="flex min-h-screen flex-col justify-between bg-slate-950 text-white">
-      {/* Top Booth Header */}
-      <div className="flex items-center justify-between px-6 pt-5 lg:px-10">
-        <div className="flex items-center gap-2.5">
-          <Image src={logo} alt="BCC Logo" className="h-8 w-8" />
-          <span className="text-sm font-bold tracking-tight text-brand-100 lg:text-base">
-            BCC Showcase Wall &bull; Exhibition Mode
+    <ExhibitionShell
+      note={
+        prefersReducedMotion ? (
+          <span className="hidden text-xs text-brand-300 md:inline">
+            Auto-slide dijeda (Reduce Motion aktif)
           </span>
-        </div>
+        ) : null
+      }
+    >
+      <p className="sr-only" aria-live="polite">
+        {`Karya ${safeIndex + 1} dari ${total}: ${currentWork.title}`}
+      </p>
 
-        {prefersReducedMotion && (
-          <span className="rounded-full border border-amber-500/40 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300">
-            Reduce Motion aktif (auto-slide dijeda)
-          </span>
-        )}
-      </div>
-
-      {/* Main Slide Area */}
-      <main className="mx-auto flex w-full max-w-7xl flex-1 items-center px-6 py-8 lg:px-10">
-        <AnimatePresence mode="wait">
-          <motion.div
+      <main className="flex flex-1 items-center px-6 py-8 lg:px-12">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.article
             key={currentWork.id}
-            initial={{ opacity: 0, x: 24 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -24 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="grid w-full grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12"
+            initial="enter"
+            animate="show"
+            exit="exit"
+            className="grid w-full items-center gap-8 lg:grid-cols-12 lg:gap-14"
           >
-            {/* Cover 16:9 */}
-            <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl lg:col-span-7">
+            <motion.div
+              variants={coverVariants}
+              className="aspect-video w-full overflow-hidden rounded-2xl bg-brand-800 ring-1 ring-brand-700 lg:col-span-7"
+            >
               {currentWork.cover_url ? (
                 <img
                   src={resolveMediaUrl(currentWork.cover_url)}
@@ -165,68 +266,71 @@ export function ExhibitionSlider() {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-slate-600">
-                  <ImageOff className="size-12" aria-hidden />
+                <div className="grid h-full w-full place-items-center text-brand-500">
+                  <ImageOff className="size-10" aria-hidden />
                 </div>
               )}
-            </div>
+            </motion.div>
 
-            {/* Info Panel (High Contrast & Large Typography) */}
-            <div className="space-y-6 lg:col-span-5">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-indigo-500/40 bg-indigo-500/15 px-3 py-1 text-xs font-semibold text-indigo-300">
-                  {currentWork.category}
-                </span>
-              </div>
-
-              <div>
-                <h1 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
-                  {currentWork.title}
-                </h1>
-                <p className="mt-4 text-base leading-relaxed text-slate-300 sm:text-lg">
-                  {currentWork.summary}
-                </p>
-              </div>
-
-              {currentWork.tech_stack.length > 0 && (
-                <div>
-                  <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-slate-400">
-                    Tech Stack
+            <motion.div variants={infoVariants} className="lg:col-span-5">
+              <motion.p
+                variants={itemVariants}
+                className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-medium uppercase tracking-[0.14em] text-brand-300"
+              >
+                {currentWork.category}
+                {currentWork.is_featured && (
+                  <span className="inline-flex items-center gap-1.5 normal-case tracking-normal text-status-featured-soft">
+                    <Star className="size-4 fill-current" aria-hidden />
+                    Karya unggulan
                   </span>
-                  <div className="flex flex-wrap gap-2">
-                    {currentWork.tech_stack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1 font-mono text-sm font-medium text-slate-200"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
+                )}
+              </motion.p>
 
-              <div className="flex items-center gap-2 text-sm text-slate-300 sm:text-base">
-                <Users className="size-4 text-indigo-400" aria-hidden />
-                <span>
-                  Tim:{" "}
-                  <strong className="font-semibold text-white">
-                    {currentWork.team_members.join(", ")}
-                  </strong>
-                </span>
-              </div>
+              <motion.h1
+                variants={itemVariants}
+                className="mt-4 text-4xl font-semibold leading-[1.05] tracking-tight text-balance sm:text-5xl xl:text-6xl"
+              >
+                {currentWork.title}
+              </motion.h1>
 
-              <div>
+              <motion.p
+                variants={itemVariants}
+                className="mt-5 max-w-xl text-lg leading-relaxed text-brand-200"
+              >
+                {currentWork.summary}
+              </motion.p>
+
+              <motion.dl
+                variants={itemVariants}
+                className="mt-8 grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 border-t border-brand-700 pt-6 text-sm"
+              >
+                <dt className="text-brand-400">Tim</dt>
+                <dd className="text-brand-100">
+                  {currentWork.team_members.join(", ") || "-"}
+                </dd>
+                <dt className="text-brand-400">Teknologi</dt>
+                <dd className="text-brand-100">
+                  {currentWork.tech_stack.join(" · ") || "-"}
+                </dd>
+              </motion.dl>
+
+              <motion.div variants={itemVariants} className="mt-8">
                 <Link
                   href={`/works/${currentWork.id}`}
-                  className="inline-flex h-12 items-center gap-2 rounded-xl bg-white px-5 text-sm font-bold text-slate-950 transition-colors hover:bg-slate-200"
+                  className={cn(
+                    "group inline-flex h-12 items-center gap-2 rounded-full bg-brand-50 px-6 text-sm font-semibold text-brand-900 transition-colors hover:bg-brand-100",
+                    focusRing,
+                  )}
                 >
-                  <span>Lihat Detail Karya</span>
-                  <ExternalLink className="size-4" aria-hidden />
+                  Lihat detail karya
+                  <ArrowRight
+                    className="size-4 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden
+                  />
                 </Link>
-              </div>
-            </div>
-          </motion.div>
+              </motion.div>
+            </motion.div>
+          </motion.article>
         </AnimatePresence>
       </main>
 
@@ -234,10 +338,12 @@ export function ExhibitionSlider() {
         currentIndex={safeIndex}
         total={total}
         isPaused={isPaused}
+        intervalMs={SLIDE_INTERVAL_MS}
         onPrev={() => prevSlide(total)}
         onNext={() => nextSlide(total)}
+        onSelect={setCurrentIndex}
         onTogglePause={togglePause}
       />
-    </div>
+    </ExhibitionShell>
   );
 }

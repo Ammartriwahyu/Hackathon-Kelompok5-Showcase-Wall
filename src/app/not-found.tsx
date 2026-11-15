@@ -1,24 +1,21 @@
-import { ArrowLeft, Compass } from "lucide-react";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { Mascot } from "@/shared/components/ui/Mascot";
 
 export default function NotFoundPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 text-center">
-      <div className="flex size-16 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
-        <Compass className="size-8" aria-hidden />
-      </div>
-      <h1 className="mt-5 text-2xl font-bold tracking-tight text-slate-900">
-        Halaman Tidak Ditemukan
-      </h1>
-      <p className="mt-2 max-w-md text-sm text-slate-600">
-        Maaf, halaman yang kamu cari tidak tersedia atau alamatnya sudah berubah.
+    <main className="flex min-h-dvh flex-col items-center justify-center bg-brand-100/30 px-4 text-center">
+      <Mascot variant="halo" priority className="w-40 sm:w-48" />
+      <h1 className="mt-6 text-2xl font-bold tracking-tight text-foreground">Halaman tidak ditemukan</h1>
+      <p className="mt-2 max-w-md text-sm text-muted">
+        Alamat yang kamu buka tidak tersedia atau sudah dipindahkan.
       </p>
       <Link
         href="/"
-        className="mt-6 inline-flex h-11 items-center gap-2 rounded-xl bg-indigo-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
+        className="mt-6 inline-flex h-11 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         <ArrowLeft className="size-4" aria-hidden />
-        <span>Kembali ke Galeri Publik</span>
+        Kembali ke galeri
       </Link>
     </main>
   );

@@ -80,50 +80,47 @@ export function RegisterForm() {
 
           <FormAlert alert={alert} />
 
-          <div className="space-y-7">
+          <div className="space-y-5">
             <Input
               id="register-name"
-              inputSize="lg"
               label="Nama"
               autoComplete="name"
               placeholder="Nama lengkap"
-              icon={<User className="size-6" />}
+              icon={<User className="size-5" />}
               error={errors.name?.message}
               {...register("name")}
             />
             <Input
               id="register-email"
               type="email"
-              inputSize="lg"
               label="Email"
               hint="Gunakan email aktif"
               autoComplete="email"
               placeholder="nama@email.com"
-              icon={<Mail className="size-6" />}
+              icon={<Mail className="size-5" />}
               error={errors.email?.message}
               {...register("email")}
             />
             <Input
               id="register-password"
               type={showPassword ? "text" : "password"}
-              inputSize="lg"
               label="Password"
               hint="8–72 karakter"
               autoComplete="new-password"
-              icon={<Lock className="size-6" />}
+              icon={<Lock className="size-5" />}
               trailing={<PasswordToggle visible={showPassword} onToggle={() => setShowPassword((v) => !v)} />}
               error={errors.password?.message}
               {...register("password")}
             />
           </div>
 
-          <div className="pt-12">
-            <Button type="submit" size="lg" className="w-full" disabled={registerMutation.isPending}>
+          <div className="pt-8">
+            <Button type="submit" className="w-full" disabled={registerMutation.isPending}>
               Daftar
-              <ArrowRight className="size-6" aria-hidden />
+              <ArrowRight className="size-5" aria-hidden />
             </Button>
             <StatusLine show={registerMutation.isPending} label="Status" value="Memproses..." boxed />
-            <p className="mt-8 text-center text-base text-slate-600 sm:text-lg">
+            <p className="mt-6 text-center text-sm text-slate-600">
               Sudah punya akun?{" "}
               <Link href="/login" className="font-semibold text-indigo-600 hover:text-indigo-700">
                 Masuk

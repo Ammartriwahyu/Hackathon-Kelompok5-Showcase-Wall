@@ -74,23 +74,21 @@ export function LoginForm() {
 
           <FormAlert alert={alert} />
 
-          <div className="space-y-7">
+          <div className="space-y-5">
             <Input
               id="login-email"
               type="email"
-              inputSize="lg"
               label="Email"
               hint="Gunakan email aktif"
               autoComplete="email"
               placeholder="nama@email.com"
-              icon={<Mail className="size-6" />}
+              icon={<Mail className="size-5" />}
               error={errors.email?.message}
               {...register("email")}
             />
             <Input
               id="login-password"
               type={showPassword ? "text" : "password"}
-              inputSize="lg"
               label="Password"
               hint={
                 <button
@@ -102,20 +100,20 @@ export function LoginForm() {
                 </button>
               }
               autoComplete="current-password"
-              icon={<Lock className="size-6" />}
+              icon={<Lock className="size-5" />}
               trailing={<PasswordToggle visible={showPassword} onToggle={() => setShowPassword((v) => !v)} />}
               error={errors.password?.message}
               {...register("password")}
             />
           </div>
 
-          <div className="pt-12">
-            <Button type="submit" size="lg" className="w-full" disabled={login.isPending}>
+          <div className="pt-8">
+            <Button type="submit" className="w-full" disabled={login.isPending}>
               Masuk
-              <ArrowRight className="size-6" aria-hidden />
+              <ArrowRight className="size-5" aria-hidden />
             </Button>
             <StatusLine show={login.isPending} label="Status" value="Memproses..." boxed />
-            <p className="mt-8 text-center text-base text-slate-600 sm:text-lg">
+            <p className="mt-6 text-center text-sm text-slate-600">
               Belum punya akun?{" "}
               <Link href="/register" className="font-semibold text-indigo-600 hover:text-indigo-700">
                 Daftar

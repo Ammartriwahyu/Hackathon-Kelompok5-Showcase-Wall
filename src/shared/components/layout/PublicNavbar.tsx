@@ -1,83 +1,83 @@
 "use client";
 
-import { LayoutDashboard, LogIn, MonitorPlay } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
+import { Images, LayoutDashboard, LogIn, MonitorPlay } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/shared/stores/useAuthStore";
-import Image from "next/image";
-import logo from "@/assets/logo.png";
+
+const NAV_ITEMS = [
+  { href: "/", label: "Galeri", icon: Images },
+  { href: "/exhibition", label: "Mode Pameran", icon: MonitorPlay },
+] as const;
+
+const focusRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
 export function PublicNavbar() {
   const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
   const isBootstrapped = useAuthStore((s) => s.isBootstrapped);
+  const isLoggedIn = isBootstrapped && !!user;
 
   return (
-    <header className="sticky top-0 z-30 h-16 w-full border-b border-slate-200 bg-white/95 backdrop-blur-md">
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2.5">
-          <Image
-            src={logo}
-            alt=""
-            aria-hidden
-            priority
-            className="size-11 rounded-xl object-contain sm:size-12.5"
-          />
-          <span className="font-bold tracking-tight text-slate-900">
-            BCC Showcase Wall
-          </span>
+    <header className="sticky top-0 z-30 w-full border-b border-border bg-background/90 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        <Link href="/" className={cn("flex min-h-11 items-center gap-2.5 rounded-lg", focusRing)}>
+          <Image src={logo} alt="" priority className="h-8 w-auto" />
+          <span className="hidden font-bold tracking-tight text-foreground sm:inline">BCC Showcase Wall</span>
         </Link>
 
-        <div className="flex items-center gap-3 sm:gap-6">
-          <nav
-            aria-label="Navigasi Publik"
-            className="flex items-center gap-2 sm:gap-5"
-          >
-            <Link
-              href="/"
-              className={cn(
-                "hidden text-sm font-semibold transition-colors sm:inline-block",
-                pathname === "/"
-                  ? "text-indigo-600"
-                  : "text-slate-600 hover:text-indigo-600",
-              )}
-            >
-              Galeri
-            </Link>
-            <Link
-              href="/exhibition"
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors sm:px-0 sm:py-0 sm:text-sm",
-                pathname === "/exhibition"
-                  ? "text-indigo-600"
-                  : "text-slate-600 hover:text-indigo-600",
-              )}
-            >
-              <MonitorPlay className="size-4 sm:hidden" aria-hidden />
-              <span>Mode Pameran</span>
-            </Link>
+        <div className="flex items-center gap-2 sm:gap-4">
+          <nav aria-label="Navigasi publik" className="flex items-center gap-1">
+            {NAV_ITEMS.map((item) => {
+              const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  aria-label={item.label}
+                  className={cn(
+                    "relative inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 text-sm font-semibold transition-colors",
+                    focusRing,
+                    active ? "text-primary" : "text-muted hover:text-foreground",
+                  )}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId="public-nav-active"
+                      className="absolute inset-0 rounded-lg bg-primary-soft"
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <Icon className="relative size-4" aria-hidden />
+                  <span className="relative hidden sm:inline">{item.label}</span>
+                </Link>
+              );
+            })}
           </nav>
 
-          <div className="hidden h-4 w-px bg-slate-200 sm:block" />
+          <span aria-hidden className="hidden h-5 w-px bg-border sm:block" />
 
-          {isBootstrapped && user ? (
-            <Link
-              href="/dashboard"
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 text-xs font-semibold text-white transition-colors hover:bg-indigo-700"
-            >
-              <LayoutDashboard className="size-3.5" aria-hidden />
-              <span>Dashboard</span>
-            </Link>
-          ) : (
-            <Link
-              href="/login"
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 text-xs font-semibold text-white transition-colors hover:bg-indigo-700"
-            >
-              <LogIn className="size-3.5" aria-hidden />
-              <span>Masuk</span>
-            </Link>
-          )}
+          <Link
+            href={isLoggedIn ? "/dashboard" : "/login"}
+            className={cn(
+              "inline-flex min-h-11 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover",
+              focusRing,
+            )}
+          >
+            {isLoggedIn ? (
+              <LayoutDashboard className="size-4" aria-hidden />
+            ) : (
+              <LogIn className="size-4" aria-hidden />
+            )}
+            <span>{isLoggedIn ? "Dashboard" : "Masuk"}</span>
+          </Link>
         </div>
       </div>
     </header>

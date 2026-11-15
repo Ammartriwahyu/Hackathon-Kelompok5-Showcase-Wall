@@ -1,6 +1,11 @@
 "use client";
 
-import { ExternalLink, LayoutDashboard, LogOut, PlusCircle } from "lucide-react";
+import {
+  ExternalLink,
+  LayoutDashboard,
+  LogOut,
+  PlusCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLogoutMutation } from "@/features/auth";
@@ -8,6 +13,8 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/shared/components/ui/Badge";
 import { Button } from "@/shared/components/ui/Button";
 import { useAuthStore } from "@/shared/stores/useAuthStore";
+import Image from "next/image";
+import logo from "@/assets/logo.png";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Daftar Karya", icon: LayoutDashboard },
@@ -24,9 +31,7 @@ export function DashboardSidebar() {
       {/* Mobile Topbar */}
       <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 lg:hidden">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-xs font-bold text-white">
-            BCC
-          </div>
+          <Image src={logo} alt="" priority className="h-8 w-auto" />
           <span className="font-bold text-slate-900">Dashboard</span>
         </Link>
 
@@ -54,14 +59,14 @@ export function DashboardSidebar() {
       <aside className="hidden w-64 shrink-0 flex-col justify-between border-r border-slate-200 bg-white p-5 lg:flex">
         <div className="space-y-6">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-xs font-bold tracking-wider text-white shadow-xs">
-              BCC
-            </div>
+            <Image src={logo} alt="" className="h-9 w-auto" />
             <div>
               <span className="block text-sm font-bold leading-tight text-slate-900">
                 Showcase Wall
               </span>
-              <span className="text-[11px] text-slate-500">Panel Pengelolaan</span>
+              <span className="text-[11px] text-slate-500">
+                Panel Pengelolaan
+              </span>
             </div>
           </Link>
 
@@ -106,7 +111,9 @@ export function DashboardSidebar() {
                   {user.role}
                 </Badge>
               </div>
-              <p className="mt-0.5 truncate text-xs text-slate-500">{user.email}</p>
+              <p className="mt-0.5 truncate text-xs text-slate-500">
+                {user.email}
+              </p>
             </div>
           )}
 

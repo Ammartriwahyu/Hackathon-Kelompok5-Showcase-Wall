@@ -6,7 +6,11 @@ import type { ReactNode } from "react";
 import { Alert } from "@/shared/components/ui/Alert";
 import { cn } from "@/lib/utils";
 
-export type FormAlertData = { variant: "error" | "warning"; title: string; description?: string } | null;
+export type FormAlertData = {
+  variant: "error" | "warning";
+  title: string;
+  description?: string;
+} | null;
 
 export function AuthHero({ title }: { title: string }) {
   return (
@@ -15,17 +19,38 @@ export function AuthHero({ title }: { title: string }) {
         <ShieldCheck className="size-3.5" aria-hidden />
         Alur Autentikasi Pengguna &amp; Kontributor
       </span>
-      <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{title}</h1>
+      <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        {title}
+      </h1>
       <p className="mt-2 text-sm leading-relaxed text-slate-600">
-        Dua opsi masuk terpadu dengan alur verifikasi dua langkah aman untuk kontributor dan kurator karya pameran
-        teknologi.
+        Dua opsi masuk terpadu dengan alur verifikasi dua langkah aman untuk
+        kontributor dan kurator karya pameran teknologi.
       </p>
     </div>
   );
 }
 
-export function AuthCard({ children, className }: { children: ReactNode; className?: string }) {
-  return <section className={cn("flex flex-col", className)}>{children}</section>;
+export function AuthCard({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section
+      className={cn(
+        "relative flex flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xl shadow-slate-900/5 sm:p-8",
+        className,
+      )}
+    >
+      <span
+        aria-hidden
+        className="absolute inset-x-10 -top-px h-px bg-linear-to-r from-transparent via-indigo-500 to-transparent"
+      />
+      {children}
+    </section>
+  );
 }
 
 export function StepHeader({
@@ -47,14 +72,22 @@ export function StepHeader({
         <span className="rounded-md border border-indigo-200 bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700">
           {label}
         </span>
-        <span className="font-mono text-xs text-slate-400" aria-label={`Langkah ${step} dari 2`}>
+        <span
+          className="font-mono text-xs text-slate-400"
+          aria-label={`Langkah ${step} dari 2`}
+        >
           0{step}/02
         </span>
       </div>
-      <h2 id={titleId} className="text-xl font-bold tracking-tight text-slate-900">
+      <h2
+        id={titleId}
+        className="text-xl font-bold tracking-tight text-slate-900"
+      >
         {title}
       </h2>
-      <div className="mt-1 text-sm leading-relaxed text-slate-500">{description}</div>
+      <div className="mt-1 text-sm leading-relaxed text-slate-500">
+        {description}
+      </div>
     </div>
   );
 }
@@ -80,7 +113,12 @@ export function FormAlert({ alert }: { alert: FormAlertData }) {
           exit={{ opacity: 0, height: 0 }}
           className="overflow-hidden"
         >
-          <Alert variant={alert.variant} title={alert.title} description={alert.description} className="mb-5" />
+          <Alert
+            variant={alert.variant}
+            title={alert.title}
+            description={alert.description}
+            className="mb-5"
+          />
         </motion.div>
       )}
     </AnimatePresence>
@@ -112,11 +150,14 @@ export function StatusLine({
           <p
             className={cn(
               "mt-3 flex items-center justify-center gap-2 text-sm",
-              boxed ? "rounded-xl border border-indigo-200 bg-indigo-50 py-3 text-indigo-700" : "text-slate-500",
+              boxed
+                ? "rounded-xl border border-indigo-200 bg-indigo-50 py-3 text-indigo-700"
+                : "text-slate-500",
             )}
           >
             <Loader2 className="size-4 animate-spin" aria-hidden />
-            {label}: <em className={boxed ? "not-italic" : "italic"}>{value}</em>
+            {label}:{" "}
+            <em className={boxed ? "not-italic" : "italic"}>{value}</em>
           </p>
         </motion.div>
       )}
@@ -124,7 +165,13 @@ export function StatusLine({
   );
 }
 
-export function PasswordToggle({ visible, onToggle }: { visible: boolean; onToggle: () => void }) {
+export function PasswordToggle({
+  visible,
+  onToggle,
+}: {
+  visible: boolean;
+  onToggle: () => void;
+}) {
   const Icon = visible ? EyeOff : Eye;
   return (
     <button

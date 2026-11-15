@@ -13,6 +13,43 @@ const BASE_RECONNECT_DELAY_MS = 1000;
 const MAX_RECONNECT_DELAY_MS = 30000;
 const RECONNECT_JITTER_MS = 500;
 
+function resolveWsUrl(): string | null {
+  const explicit = process.env.NEXT_PUBLIC_WS_URL?.trim();
+  if (explicit) {
+    return explicit;
+  }
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+  if (!apiUrl) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(apiUrl);
+    const protocol = parsed.protocol === "https:" ? "wss:" : "ws:";
+    return `${protocol}//${parsed.host}/ws/wall`;
+  } catch {
+    return null;
+  }
+}
+
+function resolveCoverUrl(coverUrl: string): string {
+  if (!coverUrl.startsWith("/")) {
+    return coverUrl;
+  }
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+  if (!apiUrl) {
+    return coverUrl;
+  }
+
+  try {
+    return new URL(coverUrl, apiUrl).toString();
+  } catch {
+    return coverUrl;
+  }
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -31,7 +68,14 @@ function isWsWorkEvent(value: unknown): value is WsWorkEvent {
   }
 
   if (value.type === "work.published") {
-    return typeof value.payload.title === "string";
+    return (
+      typeof value.payload.title === "string" &&
+      typeof value.payload.summary === "string" &&
+      typeof value.payload.category === "string" &&
+      typeof value.payload.cover_url === "string" &&
+      Array.isArray(value.payload.tech_stack) &&
+      Array.isArray(value.payload.team_members)
+    );
   }
 
   return value.type === "work.unpublished" || value.type === "work.deleted";
@@ -48,6 +92,7 @@ function upsertExhibitionWork(
   const existing = works.find((work) => work.id === payload.id);
   const nextWork: PublicWork = {
     ...payload,
+    cover_url: resolveCoverUrl(payload.cover_url),
     is_featured: existing?.is_featured ?? false,
   };
 
@@ -82,7 +127,7 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   const lastSeqRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL;
+    const wsUrl = resolveWsUrl();
     if (!wsUrl) {
       return;
     }
@@ -94,15 +139,17 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
     let socket: WebSocket | null = null;
 
     const handleEvent = (event: WsWorkEvent) => {
-      if (lastSeqRef.current !== null && event.seq <= lastSeqRef.current) {
+      if (lastSeqRef.current !== null && event.seq === lastSeqRef.current) {
         return;
       }
 
+      const hasSeqReset =
+        lastSeqRef.current !== null && event.seq < lastSeqRef.current;
       const hasSeqGap =
         lastSeqRef.current !== null && event.seq > lastSeqRef.current + 1;
       lastSeqRef.current = event.seq;
 
-      if (hasSeqGap) {
+      if (hasSeqGap || hasSeqReset) {
         void queryClient.invalidateQueries({ queryKey: ["works"] });
       }
 
@@ -112,6 +159,9 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
         );
         void queryClient.invalidateQueries({ queryKey: ["works", "public"] });
         void queryClient.invalidateQueries({ queryKey: ["works", "facets"] });
+        void queryClient.invalidateQueries({
+          queryKey: ["works", "detail", event.payload.id],
+        });
         toast.info(`Karya baru dipublikasikan: ${event.payload.title}`);
       } else {
         const targetId = event.payload.id;

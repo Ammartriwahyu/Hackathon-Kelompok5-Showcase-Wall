@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import type { ReactNode } from "react";
-import { Alert } from "@/shared/components/ui/alert";
+import { Alert } from "@/shared/components/ui/Alert";
 
 export type FormAlertData = { variant: "error" | "warning"; title: string; description?: string } | null;
 

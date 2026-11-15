@@ -15,11 +15,21 @@ export const MAX_LIST_ITEMS = 10;
 export const MAX_LIST_ITEM_LENGTH = 80;
 export const MAX_URL_LENGTH = 500;
 
+/** Memecah input dipisahkan koma, memangkas spasi, dan menghapus duplikat secara case-insensitive. */
 export function parseCommaList(raw: string): string[] {
-  return raw
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
+  const out: string[] = [];
+  const seen = new Set<string>();
+
+  for (const part of raw.split(",")) {
+    const item = part.trim();
+    if (!item) continue;
+    const key = item.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
+
+  return out;
 }
 
 const optionalUrlSchema = z

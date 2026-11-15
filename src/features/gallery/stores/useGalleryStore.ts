@@ -16,10 +16,7 @@ export const useGalleryStore = create<GalleryState>()((set) => ({
   selectedTech: "",
   setSearchQuery: (searchQuery) => set({ searchQuery }),
   setSelectedCategory: (selectedCategory) => set({ selectedCategory }),
-  setSelectedTech: (selectedTech) =>
-    set((state) => ({
-      selectedTech: state.selectedTech === selectedTech ? "" : selectedTech,
-    })),
+  setSelectedTech: (selectedTech) => set({ selectedTech }),
   resetFilters: () =>
     set({ searchQuery: "", selectedCategory: "", selectedTech: "" }),
 }));

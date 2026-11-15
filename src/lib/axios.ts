@@ -81,3 +81,8 @@ export function getFieldErrors(
   }
   return undefined;
 }
+
+export function getErrorStatus(err: unknown) {
+  return axios.isAxiosError(err) ? err.response?.status : undefined;
+}
+

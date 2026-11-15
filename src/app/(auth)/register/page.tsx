@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
-import { AuthShell } from "@/features/auth";
+import { AuthHero, RegisterForm } from "@/features/auth";
 
 export const metadata: Metadata = { title: "Daftar · BCC Showcase Wall" };
 
 export default function RegisterPage() {
-  return <AuthShell mode="register" />;
+  return (
+    <>
+      <AuthHero title="Daftar Akun BCC Showcase Wall" />
+      <div className="mt-8">
+        <RegisterForm />
+      </div>
+    </>
+  );
 }

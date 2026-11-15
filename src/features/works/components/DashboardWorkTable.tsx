@@ -54,8 +54,16 @@ export function DashboardWorkTable() {
   const setDeleteTargetWork = useDashboardStore((s) => s.setDeleteTargetWork);
   const resetFilters = useDashboardStore((s) => s.resetFilters);
 
-  const { data, isLoading, isError, refetch } = useDashboardWorks();
-  const works = data?.data ?? [];
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useDashboardWorks();
+  const works = data?.pages.flatMap((page) => page.data) ?? [];
   const hasActiveFilter = Boolean(searchQuery.trim() || statusFilter !== "ALL");
 
   return (
@@ -336,6 +344,19 @@ export function DashboardWorkTable() {
               </div>
             ))}
           </div>
+
+          {hasNextPage && (
+            <div className="flex justify-center border-t border-slate-100 p-4">
+              <Button
+                variant="outline"
+                onClick={() => fetchNextPage()}
+                loading={isFetchingNextPage}
+                className="h-10 px-5 text-sm"
+              >
+                Muat lebih banyak
+              </Button>
+            </div>
+          )}
         </>
       )}
     </section>

@@ -33,14 +33,14 @@ export function ExhibitionSlider() {
     }
   }, [prefersReducedMotion, setPaused]);
 
-  // Auto-slide timer
+  // Auto-slide timer (reset interval ketika berpindah slide secara manual)
   useEffect(() => {
     if (isPaused || total <= 1) return;
     const timer = setInterval(() => {
       nextSlide(total);
     }, SLIDE_INTERVAL_MS);
     return () => clearInterval(timer);
-  }, [isPaused, total, nextSlide]);
+  }, [isPaused, total, currentIndex, nextSlide]);
 
   // Shortcut keyboard (Space, ArrowLeft, ArrowRight)
   useEffect(() => {

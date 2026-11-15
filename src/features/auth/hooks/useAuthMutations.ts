@@ -26,7 +26,6 @@ export function useFinishLogin() {
   };
 }
 
-// Tamu yang sudah login diarahkan ke dashboard
 export function useGuestRedirect() {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
@@ -53,21 +52,27 @@ export function useResendOtpMutation() {
   return useMutation({
     mutationFn: resendOtp,
     onSuccess: () => toast.success("Kode baru telah dikirim ke email kamu."),
-    onError: (err) => toast.error(getErrorMessage(err, "Gagal mengirim ulang kode.")),
+    onError: (err) =>
+      toast.error(getErrorMessage(err, "Gagal mengirim ulang kode.")),
   });
 }
 
-export function useFirebaseOAuthMutation() {
+export function useFirebaseOAuthMutation(
+  options: { onCancelled?: () => void } = {},
+) {
   const finish = useFinishLogin();
   return useMutation({
     mutationFn: async () => loginWithFirebase(await getGoogleIdToken()),
     onSuccess: finish,
     onError: (err) => {
       if (isPopupCancelled(err)) {
-        toast.info("Login dengan Google dibatalkan.");
+        if (options.onCancelled) options.onCancelled();
+        else toast.info("Login dengan Google dibatalkan.");
         return;
       }
-      toast.error(getErrorMessage(err, "Gagal masuk dengan Google. Coba lagi."));
+      toast.error(
+        getErrorMessage(err, "Gagal masuk dengan Google. Coba lagi."),
+      );
     },
   });
 }

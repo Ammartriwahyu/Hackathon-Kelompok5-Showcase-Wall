@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "@/assets/logo.png";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -34,13 +36,16 @@ export function AuthNavbar() {
           <span className="sm:hidden">Galeri</span>
         </Link>
         <div className="flex items-center gap-3">
-          <span
+          <Image
+            src={logo}
+            alt=""
             aria-hidden
-            className="grid size-11 place-items-center rounded-xl bg-indigo-600 text-sm font-bold text-white sm:size-12.5 sm:text-lg"
-          >
-            BCC
+            priority
+            className="size-11 rounded-xl object-contain sm:size-12.5"
+          />
+          <span className="text-base font-semibold tracking-tight sm:text-xl">
+            BCC Showcase Wall
           </span>
-          <span className="text-base font-semibold tracking-tight sm:text-xl">BCC Showcase Wall</span>
           <span className="hidden rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1 font-mono text-base text-indigo-700 md:inline">
             Autentikasi
           </span>

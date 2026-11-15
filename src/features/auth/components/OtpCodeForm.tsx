@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ClipboardEvent, type FormEvent, type KeyboardEvent } from "react";
 import { ArrowLeft, BadgeCheck, Clock } from "lucide-react";
-import { getErrorStatus } from "@/lib/axios";
+import { getErrorMessage, getErrorStatus } from "@/lib/axios";
 import { cn } from "@/lib/utils";
 import { Button } from "@/shared/components/ui/Button";
 import { Modal } from "@/shared/components/ui/Modal";
@@ -88,9 +88,15 @@ export function OtpCodeForm({ open, email, purpose, onClose }: OtpCodeFormProps)
     );
 
   const alert: FormAlertData = verify.isError
-    ? getErrorStatus(verify.error) === 429
-      ? { variant: "warning", title: "Terlalu banyak percobaan. Minta kode baru." }
-      : { variant: "warning", title: "Kode salah atau sudah kedaluwarsa. Periksa email terbaru." }
+    ? {
+        variant: "warning",
+        title: getErrorMessage(
+          verify.error,
+          getErrorStatus(verify.error) === 429
+            ? "Terlalu banyak percobaan. Minta kode baru."
+            : "Kode salah atau sudah kedaluwarsa. Periksa email terbaru.",
+        ),
+      }
     : null;
 
   const canResend = seconds <= 0 && !resend.isPending;

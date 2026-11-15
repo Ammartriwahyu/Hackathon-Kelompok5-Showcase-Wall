@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Lock, Mail } from "lucide-react";
 import { toast } from "sonner";
-import { getErrorMessage, getErrorStatus } from "@/lib/axios";
+import { getErrorMessage, getErrorStatus, getFieldErrors } from "@/lib/axios";
 import { isFirebaseEnabled } from "@/lib/firebase";
 import { Button } from "@/shared/components/ui/Button";
 import { Input } from "@/shared/components/ui/Input";
@@ -28,6 +28,7 @@ export function LoginForm() {
     register,
     handleSubmit,
     resetField,
+    setError,
     formState: { errors },
   } = useForm<LoginInput>({ resolver: zodResolver(loginSchema), defaultValues: { email: "", password: "" } });
 
@@ -41,17 +42,26 @@ export function LoginForm() {
         }
         setOtp((prev) => ({ email: values.email, open: true, attempt: (prev?.attempt ?? 0) + 1 }));
       },
+      onError: (err) => {
+        const fields = getFieldErrors(err);
+        if (fields?.email) setError("email", { message: fields.email });
+        if (fields?.password) setError("password", { message: fields.password });
+      },
     }),
   );
 
   const status = getErrorStatus(login.error);
-  const alert: FormAlertData = !login.isError
-    ? null
-    : status === 401
-      ? { variant: "error", title: "Email atau password salah", description: "Pastikan kredensial terdaftar pada sistem BCC." }
-      : status === 429
-        ? { variant: "error", title: "Terlalu banyak permintaan", description: "Coba lagi nanti." }
-        : { variant: "error", title: "Gagal masuk", description: getErrorMessage(login.error) };
+  const hasFieldErrors = status === 422 && Boolean(getFieldErrors(login.error));
+  const alert: FormAlertData =
+    !login.isError || hasFieldErrors
+      ? null
+      : status === 401
+        ? { variant: "error", title: "Email atau password salah", description: "Pastikan kredensial terdaftar pada sistem BCC." }
+        : status === 403
+          ? { variant: "warning", title: "Email belum diverifikasi", description: getErrorMessage(login.error, "Silakan selesaikan verifikasi registrasi terlebih dahulu.") }
+          : status === 429
+            ? { variant: "error", title: "Terlalu banyak permintaan", description: "Coba lagi nanti." }
+            : { variant: "error", title: "Gagal masuk", description: getErrorMessage(login.error) };
 
   return (
     <>

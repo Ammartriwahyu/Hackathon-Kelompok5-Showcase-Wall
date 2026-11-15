@@ -1,24 +1,73 @@
 "use client";
+
+import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/axios";
 import { getGoogleIdToken, isPopupCancelled } from "@/lib/firebase";
 import { useAuthStore } from "@/shared/stores/useAuthStore";
-import { loginWithFirebase } from "../services/auth.service";
+import {
+  loginWithFirebase,
+  loginWithPassword,
+  registerAccount,
+  resendOtp,
+  verifyOtp,
+  type AuthSession,
+} from "../services/auth.service";
 
-export function useFirebaseOAuthMutation() {
+export function useFinishLogin() {
   const router = useRouter();
   const setAuth = useAuthStore((s) => s.setAuth);
+  return (session: AuthSession) => {
+    setAuth(session.user, session.access_token);
+    toast.success(`Selamat datang, ${session.user.display_name}!`);
+    router.replace("/dashboard");
+  };
+}
 
+// Tamu yang sudah login diarahkan ke dashboard
+export function useGuestRedirect() {
+  const router = useRouter();
+  const user = useAuthStore((s) => s.user);
+  const isBootstrapped = useAuthStore((s) => s.isBootstrapped);
+  useEffect(() => {
+    if (isBootstrapped && user) router.replace("/dashboard");
+  }, [isBootstrapped, user, router]);
+}
+
+export function useLoginMutation() {
+  return useMutation({ mutationFn: loginWithPassword });
+}
+
+export function useRegisterMutation() {
+  return useMutation({ mutationFn: registerAccount });
+}
+
+export function useVerifyOtpMutation() {
+  const finish = useFinishLogin();
+  return useMutation({ mutationFn: verifyOtp, onSuccess: finish });
+}
+
+export function useResendOtpMutation() {
+  return useMutation({
+    mutationFn: resendOtp,
+    onSuccess: () => toast.success("Kode baru telah dikirim ke email kamu."),
+    onError: (err) => toast.error(getErrorMessage(err, "Gagal mengirim ulang kode.")),
+  });
+}
+
+export function useFirebaseOAuthMutation() {
+  const finish = useFinishLogin();
   return useMutation({
     mutationFn: async () => loginWithFirebase(await getGoogleIdToken()),
-    onSuccess: ({ access_token, user }) => {
-      setAuth(user, access_token);
-      router.replace("/dashboard");
-    },
+    onSuccess: finish,
     onError: (err) => {
-      if (isPopupCancelled(err)) return;
-      toast.error("Gagal masuk dengan Google. Coba lagi.");
+      if (isPopupCancelled(err)) {
+        toast.info("Login dengan Google dibatalkan.");
+        return;
+      }
+      toast.error(getErrorMessage(err, "Gagal masuk dengan Google. Coba lagi."));
     },
   });
 }

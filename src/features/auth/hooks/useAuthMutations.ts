@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/axios";
@@ -10,6 +10,7 @@ import { useAuthStore } from "@/shared/stores/useAuthStore";
 import {
   loginWithFirebase,
   loginWithPassword,
+  logoutSession,
   registerAccount,
   resendOtp,
   verifyOtp,
@@ -73,6 +74,22 @@ export function useFirebaseOAuthMutation(
       toast.error(
         getErrorMessage(err, "Gagal masuk dengan Google. Coba lagi."),
       );
+    },
+  });
+}
+
+export function useLogoutMutation() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const logout = useAuthStore((s) => s.logout);
+
+  return useMutation({
+    mutationFn: logoutSession,
+    onSettled: () => {
+      logout();
+      queryClient.removeQueries({ queryKey: ["dashboard"] });
+      toast.success("Kamu telah keluar.");
+      router.replace("/");
     },
   });
 }

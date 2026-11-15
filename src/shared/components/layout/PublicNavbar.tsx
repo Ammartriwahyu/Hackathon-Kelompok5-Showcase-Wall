@@ -15,7 +15,7 @@ const NAV_ITEMS = [
 ] as const;
 
 const focusRing =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-800";
 
 export function PublicNavbar() {
   const pathname = usePathname();
@@ -24,11 +24,11 @@ export function PublicNavbar() {
   const isLoggedIn = isBootstrapped && !!user;
 
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-border bg-background/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-30 w-full border-b border-brand-700 bg-brand-800/95 backdrop-blur-md">
+      <div className="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6 lg:px-10">
         <Link href="/" className={cn("flex min-h-11 items-center gap-2.5 rounded-lg", focusRing)}>
-          <Image src={logo} alt="" priority className="h-8 w-auto" />
-          <span className="hidden font-bold tracking-tight text-foreground sm:inline">BCC Showcase Wall</span>
+          <Image src={logo} alt="" priority className="h-10 w-auto sm:h-11" />
+          <span className="hidden font-bold tracking-tight text-brand-50 sm:inline">BCC Showcase Wall</span>
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-4">
@@ -45,13 +45,13 @@ export function PublicNavbar() {
                   className={cn(
                     "relative inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 text-sm font-semibold transition-colors",
                     focusRing,
-                    active ? "text-primary" : "text-muted hover:text-foreground",
+                    active ? "text-brand-50" : "text-brand-200 hover:text-brand-50",
                   )}
                 >
                   {active && (
                     <motion.span
                       layoutId="public-nav-active"
-                      className="absolute inset-0 rounded-lg bg-primary-soft"
+                      className="absolute inset-0 rounded-lg bg-brand-700"
                       transition={{ type: "spring", stiffness: 420, damping: 34 }}
                     />
                   )}
@@ -62,12 +62,12 @@ export function PublicNavbar() {
             })}
           </nav>
 
-          <span aria-hidden className="hidden h-5 w-px bg-border sm:block" />
+          <span aria-hidden className="hidden h-5 w-px bg-brand-700 sm:block" />
 
           <Link
             href={isLoggedIn ? "/dashboard" : "/login"}
             className={cn(
-              "inline-flex min-h-11 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover",
+              "inline-flex min-h-11 items-center gap-1.5 rounded-lg bg-brand-50 px-4 text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-100",
               focusRing,
             )}
           >

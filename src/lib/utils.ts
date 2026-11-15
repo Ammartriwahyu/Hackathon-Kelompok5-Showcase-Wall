@@ -1,3 +1,10 @@
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
 export function resolveMediaUrl(url: string | null | undefined) {
   if (!url) return "";
   if (/^(https?:|blob:|data:)/.test(url)) return url;

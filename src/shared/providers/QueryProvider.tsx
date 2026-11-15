@@ -10,7 +10,11 @@ export function QueryProvider({ children }: { children: ReactNode }) {
         defaultOptions: {
           queries: {
             staleTime: 30 * 1000,
-            retry: 1,
+            retry: (count, error) => {
+              const status = (error as { response?: { status?: number } })
+                ?.response?.status;
+              return status !== undefined && status < 500 ? false : count < 1;
+            },
             refetchOnWindowFocus: false,
           },
         },

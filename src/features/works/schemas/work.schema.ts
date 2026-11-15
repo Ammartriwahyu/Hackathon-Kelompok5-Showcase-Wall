@@ -9,6 +9,41 @@ export const WORK_CATEGORIES = [
   "UI/UX & Design",
 ] as const;
 
+export const TECH_STACK_OPTIONS = [
+  "Next.js",
+  "React",
+  "TypeScript",
+  "JavaScript",
+  "Tailwind CSS",
+  "Vue.js",
+  "Flutter",
+  "React Native",
+  "Go",
+  "Node.js",
+  "Express",
+  "NestJS",
+  "Python",
+  "FastAPI",
+  "Django",
+  "Laravel",
+  "PHP",
+  "Spring Boot",
+  "PostgreSQL",
+  "MySQL",
+  "MongoDB",
+  "Redis",
+  "Firebase",
+  "Supabase",
+  "Docker",
+  "TensorFlow",
+  "PyTorch",
+  "Scikit-learn",
+  "Arduino",
+  "ESP32",
+  "Figma",
+  "Unity",
+] as const;
+
 export const MAX_COVER_SIZE = 5 * 1024 * 1024; // 5MB
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 export const MAX_LIST_ITEMS = 10;
@@ -103,7 +138,7 @@ export const workFormSchema = z.object({
     .max(50, "Kategori maksimal 50 karakter"),
   tech_stack_text: commaListSchema(
     "Tech stack",
-    "Masukkan minimal 1 tech stack (pisahkan dengan koma)",
+    "Pilih minimal 1 tech stack",
   ),
   team_members_text: commaListSchema(
     "Anggota tim",

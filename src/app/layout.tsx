@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import { AuthProvider } from "@/shared/providers/AuthProvider";
 import { MotionProvider } from "@/shared/providers/MotionProvider";
 import { QueryProvider } from "@/shared/providers/QueryProvider";
+import { WebSocketProvider } from "@/shared/providers/WebSocketProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,12 +30,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <QueryProvider>
-          <AuthProvider>
-            <MotionProvider>
-              {children}
-              <Toaster richColors position="top-right" />
-            </MotionProvider>
-          </AuthProvider>
+          <WebSocketProvider>
+            <AuthProvider>
+              <MotionProvider>
+                {children}
+                <Toaster richColors position="top-right" />
+              </MotionProvider>
+            </AuthProvider>
+          </WebSocketProvider>
         </QueryProvider>
       </body>
     </html>

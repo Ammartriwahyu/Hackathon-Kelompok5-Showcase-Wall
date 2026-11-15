@@ -94,7 +94,7 @@ export function LoginForm() {
                 <button
                   type="button"
                   onClick={() => toast.info("Reset password belum tersedia. Hubungi Admin BCC.")}
-                  className="rounded font-medium text-indigo-600 hover:text-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                  className="rounded font-medium text-primary hover:text-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   Lupa password?
                 </button>
@@ -113,9 +113,9 @@ export function LoginForm() {
               <ArrowRight className="size-5" aria-hidden />
             </Button>
             <StatusLine show={login.isPending} label="Status" value="Memproses..." boxed />
-            <p className="mt-6 text-center text-sm text-slate-600">
+            <p className="mt-6 text-center text-sm text-muted">
               Belum punya akun?{" "}
-              <Link href="/register" className="font-semibold text-indigo-600 hover:text-indigo-700">
+              <Link href="/register" className="font-semibold text-primary hover:text-primary-hover">
                 Daftar
               </Link>
             </p>

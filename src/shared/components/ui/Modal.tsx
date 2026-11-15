@@ -45,7 +45,7 @@ export function Modal({ isOpen, onClose, title, labelledBy, className, children 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs"
+            className="fixed inset-0 bg-brand-900/50 backdrop-blur-xs"
           />
           <motion.div
             initial={{ opacity: 0, y: 24, scale: 0.98 }}
@@ -53,20 +53,20 @@ export function Modal({ isOpen, onClose, title, labelledBy, className, children 
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className={cn(
-              "relative z-10 max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-slate-200 bg-white p-6 shadow-xl sm:rounded-2xl",
+              "relative z-10 max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-border bg-white p-6 shadow-xl sm:rounded-2xl",
               className,
             )}
           >
             {title && (
-              <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-4">
-                <h2 id="modal-title" className="text-lg font-bold text-slate-900">
+              <div className="mb-4 flex items-center justify-between border-b border-brand-100 pb-4">
+                <h2 id="modal-title" className="text-lg font-bold text-foreground">
                   {title}
                 </h2>
                 <button
                   type="button"
                   onClick={onClose}
                   aria-label="Tutup modal"
-                  className="grid size-11 place-items-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                  className="grid size-11 place-items-center rounded-lg text-brand-400 transition-colors hover:bg-brand-100/60 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <X className="size-5" aria-hidden />
                 </button>

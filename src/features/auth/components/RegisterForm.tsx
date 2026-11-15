@@ -120,9 +120,9 @@ export function RegisterForm() {
               <ArrowRight className="size-5" aria-hidden />
             </Button>
             <StatusLine show={registerMutation.isPending} label="Status" value="Memproses..." boxed />
-            <p className="mt-6 text-center text-sm text-slate-600">
+            <p className="mt-6 text-center text-sm text-muted">
               Sudah punya akun?{" "}
-              <Link href="/login" className="font-semibold text-indigo-600 hover:text-indigo-700">
+              <Link href="/login" className="font-semibold text-primary hover:text-primary-hover">
                 Masuk
               </Link>
             </p>

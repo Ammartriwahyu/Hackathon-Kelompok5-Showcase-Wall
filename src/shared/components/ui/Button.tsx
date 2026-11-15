@@ -3,9 +3,9 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const VARIANTS = {
-  primary: "bg-indigo-600 text-white hover:bg-indigo-700",
-  outline: "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50",
-  ghost: "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
+  primary: "bg-primary text-white hover:bg-primary-hover",
+  outline: "border border-border bg-white text-foreground hover:bg-brand-100/40",
+  ghost: "text-muted hover:bg-brand-100/60 hover:text-foreground",
 } as const;
 
 const SIZES = {
@@ -38,7 +38,7 @@ export function Button({
       aria-busy={loading}
       className={cn(
         "inline-flex items-center justify-center gap-2 font-semibold transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         "disabled:cursor-not-allowed disabled:opacity-60",
         SIZES[size],
         VARIANTS[variant],

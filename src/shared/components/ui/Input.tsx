@@ -35,10 +35,10 @@ export function Input({
   return (
     <div className={className}>
       <div className="mb-2 flex items-center justify-between gap-2">
-        <label htmlFor={id} className={cn("font-medium text-slate-800", s.label)}>
+        <label htmlFor={id} className={cn("font-medium text-brand-800", s.label)}>
           {label}
         </label>
-        {hint && <span className={cn("text-slate-500", s.hint)}>{hint}</span>}
+        {hint && <span className={cn("text-brand-500", s.hint)}>{hint}</span>}
       </div>
       <div
         className={cn(
@@ -46,11 +46,11 @@ export function Input({
           s.box,
           error
             ? "border-red-400 focus-within:ring-red-100"
-            : "border-slate-200 focus-within:border-indigo-500 focus-within:ring-indigo-100",
+            : "border-border focus-within:border-brand-400 focus-within:ring-brand-100",
         )}
       >
         {icon && (
-          <span className="text-slate-400" aria-hidden>
+          <span className="text-brand-400" aria-hidden>
             {icon}
           </span>
         )}
@@ -60,7 +60,7 @@ export function Input({
           aria-invalid={!!error}
           aria-describedby={errorId}
           className={cn(
-            "h-full w-full min-w-0 bg-transparent text-slate-900 outline-none placeholder:text-slate-400",
+            "h-full w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-brand-400",
             s.input,
           )}
           {...props}

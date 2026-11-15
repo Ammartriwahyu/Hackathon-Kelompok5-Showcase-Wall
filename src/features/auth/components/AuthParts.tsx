@@ -15,14 +15,14 @@ export type FormAlertData = {
 export function AuthHero({ title }: { title: string }) {
   return (
     <div>
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700">
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-primary-soft px-3 py-1 text-xs font-medium text-brand-600">
         <ShieldCheck className="size-3.5" aria-hidden />
         Alur Autentikasi Pengguna &amp; Kontributor
       </span>
-      <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+      <h1 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
         {title}
       </h1>
-      <p className="mt-2 text-sm leading-relaxed text-slate-600">
+      <p className="mt-2 text-sm leading-relaxed text-muted">
         Dua opsi masuk terpadu dengan alur verifikasi dua langkah aman untuk
         kontributor dan kurator karya pameran teknologi.
       </p>
@@ -40,13 +40,13 @@ export function AuthCard({
   return (
     <section
       className={cn(
-        "relative flex flex-col rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xl shadow-slate-900/5 sm:p-8",
+        "relative flex flex-col rounded-3xl border border-border/80 bg-white p-6 shadow-xl shadow-brand-900/5 sm:p-8",
         className,
       )}
     >
       <span
         aria-hidden
-        className="absolute inset-x-10 -top-px h-px bg-linear-to-r from-transparent via-indigo-500 to-transparent"
+        className="absolute inset-x-10 -top-px h-px bg-linear-to-r from-transparent via-brand-400 to-transparent"
       />
       {children}
     </section>
@@ -69,11 +69,11 @@ export function StepHeader({
   return (
     <div className="mb-6">
       <div className="mb-4 flex items-center justify-between">
-        <span className="rounded-md border border-indigo-200 bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700">
+        <span className="rounded-md border border-brand-200 bg-primary-soft px-2.5 py-1 text-xs font-medium text-brand-600">
           {label}
         </span>
         <span
-          className="font-mono text-xs text-slate-400"
+          className="font-mono text-xs text-brand-400"
           aria-label={`Langkah ${step} dari 2`}
         >
           0{step}/02
@@ -81,11 +81,11 @@ export function StepHeader({
       </div>
       <h2
         id={titleId}
-        className="text-xl font-bold tracking-tight text-slate-900"
+        className="text-xl font-bold tracking-tight text-foreground"
       >
         {title}
       </h2>
-      <div className="mt-1 text-sm leading-relaxed text-slate-500">
+      <div className="mt-1 text-sm leading-relaxed text-brand-500">
         {description}
       </div>
     </div>
@@ -95,9 +95,9 @@ export function StepHeader({
 export function AuthDivider({ text }: { text: string }) {
   return (
     <div className="my-6 flex items-center gap-3" role="separator">
-      <span className="h-px flex-1 bg-slate-200" />
-      <span className="text-sm text-slate-500">{text}</span>
-      <span className="h-px flex-1 bg-slate-200" />
+      <span className="h-px flex-1 bg-brand-100" />
+      <span className="text-sm text-brand-500">{text}</span>
+      <span className="h-px flex-1 bg-brand-100" />
     </div>
   );
 }
@@ -151,8 +151,8 @@ export function StatusLine({
             className={cn(
               "mt-3 flex items-center justify-center gap-2 text-sm",
               boxed
-                ? "rounded-xl border border-indigo-200 bg-indigo-50 py-3 text-indigo-700"
-                : "text-slate-500",
+                ? "rounded-xl border border-brand-200 bg-primary-soft py-3 text-brand-600"
+                : "text-brand-500",
             )}
           >
             <Loader2 className="size-4 animate-spin" aria-hidden />
@@ -179,7 +179,7 @@ export function PasswordToggle({
       onClick={onToggle}
       aria-label={visible ? "Sembunyikan password" : "Tampilkan password"}
       aria-pressed={visible}
-      className="-mr-2 grid size-11 place-items-center rounded-lg text-slate-400 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+      className="-mr-2 grid size-11 place-items-center rounded-lg text-brand-400 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       <Icon className="size-5" aria-hidden />
     </button>

@@ -11,6 +11,9 @@ export const WORK_CATEGORIES = [
 
 export const MAX_COVER_SIZE = 5 * 1024 * 1024; // 5MB
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+export const MAX_LIST_ITEMS = 10;
+export const MAX_LIST_ITEM_LENGTH = 80;
+export const MAX_URL_LENGTH = 500;
 
 export function parseCommaList(raw: string): string[] {
   return raw
@@ -22,6 +25,7 @@ export function parseCommaList(raw: string): string[] {
 const optionalUrlSchema = z
   .string()
   .trim()
+  .max(MAX_URL_LENGTH, `URL maksimal ${MAX_URL_LENGTH} karakter`)
   .refine(
     (val) => {
       if (!val) return true;
@@ -35,28 +39,66 @@ const optionalUrlSchema = z
     { message: "Format URL tidak valid (sertakan https://)" },
   );
 
+function commaListSchema(noun: string, minMessage: string) {
+  return z
+    .string()
+    .trim()
+    .superRefine((val, ctx) => {
+      const items = parseCommaList(val);
+      if (items.length < 1) {
+        ctx.addIssue({ code: "custom", message: minMessage });
+        return;
+      }
+      if (items.length > MAX_LIST_ITEMS) {
+        ctx.addIssue({
+          code: "custom",
+          message: `${noun} maksimal ${MAX_LIST_ITEMS} item`,
+        });
+        return;
+      }
+      if (items.some((item) => item.length > MAX_LIST_ITEM_LENGTH)) {
+        ctx.addIssue({
+          code: "custom",
+          message: `Setiap item ${noun.toLowerCase()} maksimal ${MAX_LIST_ITEM_LENGTH} karakter`,
+        });
+      }
+    });
+}
+
 export const workFormSchema = z.object({
-  title: z.string().trim().min(3, "Judul minimal 3 karakter"),
+  title: z
+    .string()
+    .trim()
+    .min(3, "Judul minimal 3 karakter")
+    .max(150, "Judul maksimal 150 karakter"),
   summary: z
     .string()
     .trim()
     .min(1, "Ringkasan wajib diisi")
     .max(160, "Ringkasan maksimal 160 karakter"),
-  description: z.string().trim().min(10, "Deskripsi minimal 10 karakter"),
-  benefits: z.string().trim().min(10, "Masalah & manfaat minimal 10 karakter"),
-  category: z.string().trim().min(1, "Kategori wajib dipilih"),
-  tech_stack_text: z
+  description: z
     .string()
     .trim()
-    .refine((val) => parseCommaList(val).length >= 1, {
-      message: "Masukkan minimal 1 tech stack (pisahkan dengan koma)",
-    }),
-  team_members_text: z
+    .min(10, "Deskripsi minimal 10 karakter")
+    .max(10000, "Deskripsi maksimal 10000 karakter"),
+  benefits: z
     .string()
     .trim()
-    .refine((val) => parseCommaList(val).length >= 1, {
-      message: "Masukkan minimal 1 nama anggota tim (pisahkan dengan koma)",
-    }),
+    .min(10, "Masalah & manfaat minimal 10 karakter")
+    .max(5000, "Masalah & manfaat maksimal 5000 karakter"),
+  category: z
+    .string()
+    .trim()
+    .min(1, "Kategori wajib dipilih")
+    .max(50, "Kategori maksimal 50 karakter"),
+  tech_stack_text: commaListSchema(
+    "Tech stack",
+    "Masukkan minimal 1 tech stack (pisahkan dengan koma)",
+  ),
+  team_members_text: commaListSchema(
+    "Anggota tim",
+    "Masukkan minimal 1 nama anggota tim (pisahkan dengan koma)",
+  ),
   demo_url: optionalUrlSchema,
   repo_url: optionalUrlSchema,
 });

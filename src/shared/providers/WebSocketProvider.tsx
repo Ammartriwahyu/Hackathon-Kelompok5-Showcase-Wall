@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { type InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { resolveMediaUrl } from "@/lib/utils";
 import type {
   ApiResponse,
   PublicWork,
@@ -30,23 +31,6 @@ function resolveWsUrl(): string | null {
     return `${protocol}//${parsed.host}/ws/wall`;
   } catch {
     return null;
-  }
-}
-
-function resolveCoverUrl(coverUrl: string): string {
-  if (!coverUrl.startsWith("/")) {
-    return coverUrl;
-  }
-
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
-  if (!apiUrl) {
-    return coverUrl;
-  }
-
-  try {
-    return new URL(coverUrl, apiUrl).toString();
-  } catch {
-    return coverUrl;
   }
 }
 
@@ -92,7 +76,7 @@ function upsertExhibitionWork(
   const existing = works.find((work) => work.id === payload.id);
   const nextWork: PublicWork = {
     ...payload,
-    cover_url: resolveCoverUrl(payload.cover_url),
+    cover_url: resolveMediaUrl(payload.cover_url),
     is_featured: existing?.is_featured ?? false,
   };
 

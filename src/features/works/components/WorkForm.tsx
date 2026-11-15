@@ -122,6 +122,13 @@ export function WorkForm({ initialData }: WorkFormProps) {
     }
   };
 
+  const initialCategory = initialData?.category?.trim();
+  const categoryOptions: readonly string[] =
+    initialCategory &&
+    !WORK_CATEGORIES.includes(initialCategory as (typeof WORK_CATEGORIES)[number])
+      ? [initialCategory, ...WORK_CATEGORIES]
+      : WORK_CATEGORIES;
+
   const watched = watch();
   const previewData = {
     title: watched.title,
@@ -172,7 +179,7 @@ export function WorkForm({ initialData }: WorkFormProps) {
             {...register("category")}
             className="h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
           >
-            {WORK_CATEGORIES.map((cat) => (
+            {categoryOptions.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
               </option>
